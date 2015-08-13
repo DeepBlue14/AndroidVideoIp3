@@ -14,8 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:scaleType="fitXY"
-            android:layout_weight="1"
-            android:src="@drawable/camera" />
+            android:layout_weight="1" />
 
         <ImageButton
             android:id="@+id/right_camera"
@@ -23,8 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:scaleType="fitXY"
-            android:layout_weight="1"
-            android:src="@drawable/camera" />
+            android:layout_weight="1" />
     </LinearLayout>
 
 </FrameLayout>

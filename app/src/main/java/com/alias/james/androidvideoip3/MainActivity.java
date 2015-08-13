@@ -19,8 +19,10 @@ import android.view.MenuItem;
 
 public class MainActivity extends FragmentActivity implements OnCameraSelectedListener
 {
+    private Menu menu;
     private FetchLRFrames fetchLRFrames;
     private NetworkConfig networkConfig = new NetworkConfig();
+    private Login login = new Login();
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -34,6 +36,7 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
             if(savedInstanceState == null)
             {
                 CameraOptions cameraOptions = new CameraOptions();
+                cameraOptions.setLRFrames(fetchLRFrames.getlFrame(), fetchLRFrames.getRFrame() );
                 cameraOptions.setArguments(getIntent().getExtras());
                 getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, cameraOptions).commit();
             }
@@ -46,6 +49,7 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
     {
         System.out.println("created menu");
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menu = menu;
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -58,13 +62,17 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
         {
             case R.id.network:
                 System.out.println("\"Network\" selected");
-                //launch network stuff
                 networkConfig.initNetworkConfigDialog(this, getLayoutInflater() ); //!!!this should really happen on create!!!
                 networkConfig.getNetworkDialog().show();
                 return true;
             case R.id.help:
                 System.out.println("\"Help\" selected");
-                //launch help stuff
+                return true;
+            case R.id.admin:
+                System.out.println("\"Administrator\" selected");
+                login.initLoginDialog(this, getLayoutInflater());
+                login.show( menu.getItem(2));
+                System.out.println("checking for admin status");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

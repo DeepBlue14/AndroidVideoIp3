@@ -34,14 +34,14 @@ public class FetchLRFrames
 {
     private Socket socket;
     private String ipAddressStr = "10.0.4.6";
-    private int port = 50002;
+    private int port = 50000;
     private Bitmap lFrame;
     private Bitmap rFrame;
 
 
     public FetchLRFrames(Resources resources) //Resources from Activity
     {
-        System.out.println("Starting FetchLRFrames...");
+        System.out.println("^^^Starting FetchLRFrames...^^^");
         lFrame = BitmapFactory.decodeResource(resources, R.drawable.camera);
         rFrame = BitmapFactory.decodeResource(resources, R.drawable.camera);
 
@@ -56,7 +56,7 @@ public class FetchLRFrames
             String request = "LF";
             PrintWriter pub = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
             pub.println(request);
-            System.out.println("Left frame request successfully sent");
+            System.out.println("^^^Left frame request successfully sent^^^");
         }
         catch (UnknownHostException e)
         {
@@ -82,6 +82,7 @@ public class FetchLRFrames
             {
                 InetAddress serverAddress = InetAddress.getByName(ipAddressStr);
                 socket = new Socket(serverAddress, port);
+                System.out.println("^^^Successfully connected to server^^^");
 
                 InputStream sub = socket.getInputStream();
 
@@ -114,17 +115,21 @@ public class FetchLRFrames
 
                     }while(bytesRead != -1 && bytesRead != 0);
 
-                    lFrame = BitmapFactory.decodeByteArray(buffer, 0, buffer.length);
+                    System.out.println("^^^Successfully read image^^^");
 
+                    lFrame = BitmapFactory.decodeByteArray(buffer, 0, buffer.length);
+                    System.out.println("^^^Successfully decoded byte array --> bitmap^^^");
                 }
 
             }
             catch (UnknownHostException e)
             {
+                System.out.println("^^^Ousted");
                 e.printStackTrace();
             }
             catch (IOException e)
             {
+                System.out.println("^^^Ousted");
                 e.printStackTrace();
             }
 

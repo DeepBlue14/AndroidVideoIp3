@@ -38,6 +38,7 @@ public class NetworkConfig
     private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color";
     private AlertDialog.Builder networkDialog;
 
+
     public void initNetworkConfigDialog(Activity activity, LayoutInflater layoutInflater)
     {
         LayoutInflater inflater = layoutInflater;
@@ -64,7 +65,7 @@ public class NetworkConfig
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         System.out.println("\"Cancel\" alert button selected");
-                        System.exit(0);
+                        //System.exit(0);
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert);

@@ -16,11 +16,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 public class Login
 {
     private AlertDialog.Builder loginDialog;
+    private MenuItem adminCb;
 
     public void initLoginDialog(Activity activity, LayoutInflater layoutInflater)
     {
@@ -34,26 +37,36 @@ public class Login
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        /*
-                        EditText userName = (EditText) view.findViewById(R.id.ip_address);
-                        EditText password = (EditText) view.findViewById(R.id.port);
 
-                        if(!userName.getText().toString().isEmpty() && !password.getText().toString().isEmpty() )
-                        {
-                            ;
+                        String userNameStr = ((EditText) view.findViewById(R.id.username)).getText().toString();
+                        String passwordStr = ((EditText) view.findViewById(R.id.password)).getText().toString();
+
+                        if (userNameStr.equals("h") && passwordStr.equals("r")) {
+                            if (adminCb.isChecked() == true) {
+                                adminCb.setChecked(false); // log out
+                            } else {
+                                adminCb.setChecked(true); // log in
+                            }
                         }
-                        */
+
+
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         System.out.println("\"Cancel\" alert button selected");
-                        System.exit(0);
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert);
                 //.show();
+    }
+
+
+    public void show(MenuItem checkbox)
+    {
+        adminCb = checkbox;
+        loginDialog.show();
     }
 
 
