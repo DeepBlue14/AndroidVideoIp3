@@ -31,6 +31,7 @@ import org.w3c.dom.Text;
 
 public class VideoFrag extends Fragment implements WebView.OnTouchListener, TextToSpeech.OnInitListener
 {
+    VerifyTouch verifyTouch = new VerifyTouch();
     private DataCom dataCom = new DataCom();
     private TextToSpeech tts;
     private WebView webView;
@@ -55,6 +56,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.camera_layout, container, false);
+        //verifyTouch.initVerifyDialog(getActivity(), inflater);
         tts = new TextToSpeech(getActivity(), this);
         webView = (WebView) view.findViewById(R.id.web_view);
         webView.getSettings().setDomStorageEnabled(true);
@@ -94,6 +96,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
                 System.out.println("ACTION_UP at: (" + event.getX() + ", " + event.getY() + ")");
                 if(isWithinMargin(fingerPressX, fingerReleaseX, 25.0f) && isWithinMargin(fingerPressY, fingerReleaseY, 25.0f) )
                 {
+                    //verifyTouch.show();
                     //alertDialog.show(); //***James was here***
                     //dataCom.sendMsg("Msg: |" + fingerPressX + "|" + fingerPressY + "|"); // ***James was here***
                     //alertDialog.show(); //***James was here***
