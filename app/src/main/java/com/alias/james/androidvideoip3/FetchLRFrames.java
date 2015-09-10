@@ -20,6 +20,7 @@ package com.alias.james.androidvideoip3;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.YuvImage;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -29,6 +30,13 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.highgui.Highgui;
+import org.opencv.imgproc.Imgproc;
 
 public class FetchLRFrames
 {
@@ -42,6 +50,12 @@ public class FetchLRFrames
     public FetchLRFrames(Resources resources) //Resources from Activity
     {
         System.out.println("^^^Starting FetchLRFrames...^^^");
+
+        if(!OpenCVLoader.initDebug() )
+        {
+            System.err.println("^^^Failed to load OpenCV @ FetchLRFrames::FetchLRFrames()");
+        }
+
         lFrame = BitmapFactory.decodeResource(resources, R.drawable.camera);
         rFrame = BitmapFactory.decodeResource(resources, R.drawable.camera);
 
@@ -84,16 +98,17 @@ public class FetchLRFrames
                 socket = new Socket(serverAddress, port);
                 System.out.println("^^^Successfully connected to server^^^");
 
-                InputStream sub = socket.getInputStream();
+
 
                 while(!Thread.currentThread().isInterrupted() )
                 {
+                    InputStream sub = socket.getInputStream();
                     // !!!???will this be true 32 & 64 bit processors???!!!
-                    byte[] imgSizeByteArr = new byte[4];
-                    sub.read(imgSizeByteArr, 0, 4);
+                    byte[] imgSizeByteArr = new byte[5];
+                    sub.read(imgSizeByteArr);
                     String sizeStr = new String(imgSizeByteArr);
+                    //System.out.println("^^^recieved: " + sizeStr);
                     int size = Integer.parseInt(sizeStr);
-
                     byte[] buffer = new byte[size];
                     int currPos = 0;
                     int bytesRead = 0;
@@ -115,10 +130,9 @@ public class FetchLRFrames
 
                     }while(bytesRead != -1 && bytesRead != 0);
 
-                    System.out.println("^^^Successfully read image^^^");
+                    System.out.println("^^^recieved image bytes:" + currPos);
 
                     lFrame = BitmapFactory.decodeByteArray(buffer, 0, buffer.length);
-                    System.out.println("^^^Successfully decoded byte array --> bitmap^^^");
                 }
 
             }
