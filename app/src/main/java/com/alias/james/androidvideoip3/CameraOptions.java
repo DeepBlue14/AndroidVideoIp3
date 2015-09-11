@@ -34,16 +34,22 @@ public class CameraOptions extends Fragment
     OnCameraSelectedListener mCallback;
     Bitmap lFrame;
     Bitmap rFrame;
+    ImageButton leftBtn;
+    ImageButton rightBtn;
 
 
-
+    public CameraOptions()
+    {
+        ;
+    }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        //System.out.println("^^^HERE (1)");
         super.onCreate(savedInstanceState);
-
+        //System.out.println("^^^HERE (2)");
 
 
     }
@@ -53,6 +59,7 @@ public class CameraOptions extends Fragment
     {
         this.lFrame = lFrame;
         this.rFrame = rFrame;
+
     }
 
 
@@ -60,8 +67,8 @@ public class CameraOptions extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.camera_options, container, false);
-        ImageButton leftBtn = (ImageButton) view.findViewById(R.id.left_camera);
-        ImageButton rightBtn = (ImageButton) view.findViewById(R.id.right_camera);
+        leftBtn = (ImageButton) view.findViewById(R.id.left_camera);
+        rightBtn = (ImageButton) view.findViewById(R.id.right_camera);
 
         if(lFrame != null)
         {
@@ -97,11 +104,37 @@ public class CameraOptions extends Fragment
             }
         });
 
-
+        //System.out.println("^^^HERE (7)");
         return view;
     }
 
 
+    public void updateButtons(Bitmap lFrame, Bitmap rFrame)
+    {
+        setLRFrames(lFrame, rFrame);
+
+        if(lFrame != null)
+        {
+            leftBtn.setImageBitmap(lFrame);
+        }
+
+        if(rFrame != null)
+        {
+            rightBtn.setImageBitmap(rFrame);
+        }
+    }
+
+
+    public ImageButton getRightBtn()
+    {
+        return rightBtn;
+    }
+
+
+    public ImageButton getLeftBtn()
+    {
+        return leftBtn;
+    }
 
 
 
@@ -127,16 +160,6 @@ public class CameraOptions extends Fragment
             throw new ClassCastException(activity.toString() + "must implement OnCameraSelectionListener");
         }
     }
-
-
-
-
-
-
-
-
-
-
 
 
 }

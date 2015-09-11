@@ -11,11 +11,14 @@
 
 package com.alias.james.androidvideoip3;
 
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+
 
 public class MainActivity extends FragmentActivity implements OnCameraSelectedListener
 {
@@ -28,17 +31,22 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        fetchLRFrames = new FetchLRFrames(getResources() );
+        //fetchLRFrames = new FetchLRFrames(getResources(), this);
+        //fetchLRFrames.execute(5, 5, 5);
         setContentView(R.layout.activity_main);
 
         if(findViewById(R.id.fragment_container) != null)
         {
             if(savedInstanceState == null)
             {
-                CameraOptions cameraOptions = new CameraOptions();
-                cameraOptions.setLRFrames(fetchLRFrames.getlFrame(), fetchLRFrames.getRFrame() );
-                cameraOptions.setArguments(getIntent().getExtras());
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, cameraOptions).commit();
+                fetchLRFrames = new FetchLRFrames(getResources(), this);
+                fetchLRFrames.execute(5, 5, 5);
+                /*CameraOptions cameraOptions = new CameraOptions();
+                cameraOptions.setLRFrames(fetchLRFrames.getlFrame(), fetchLRFrames.getRFrame());
+                cameraOptions.setArguments(getIntent().getExtras());*/
+                //cameraOptions.setArguments(activity.getIntent().getExtras())
+
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fetchLRFrames.getCameraOptions()).commit();
             }
         }
     }

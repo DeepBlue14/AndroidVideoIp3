@@ -17,39 +17,39 @@
 package com.alias.james.androidvideoip3;
 
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.YuvImage;
+import android.os.AsyncTask;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
-import org.opencv.core.Core;
 import org.opencv.core.CvType;
-import org.opencv.highgui.Highgui;
-import org.opencv.imgproc.Imgproc;
+import org.opencv.core.Mat;
 
-public class FetchLRFrames
+public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 {
     private Socket socket;
     private String ipAddressStr = "10.0.4.6";
     private int port = 50000;
+    private final int MATRIX_SIZE = 921600;
     private Bitmap lFrame;
     private Bitmap rFrame;
+    Activity activity;
+    CameraOptions cameraOptions;
 
 
-    public FetchLRFrames(Resources resources) //Resources from Activity
+    public FetchLRFrames(Resources resources, Activity activity) //Resources from Activity
     {
         System.out.println("^^^Starting FetchLRFrames...^^^");
+        this.activity = activity;
 
         if(!OpenCVLoader.initDebug() )
         {
@@ -59,107 +59,87 @@ public class FetchLRFrames
         lFrame = BitmapFactory.decodeResource(resources, R.drawable.camera);
         rFrame = BitmapFactory.decodeResource(resources, R.drawable.camera);
 
-        new Thread(new ComThread()).start();
+        cameraOptions = new CameraOptions();
+        cameraOptions.setLRFrames(getlFrame(), getRFrame());
+        cameraOptions.setArguments(activity.getIntent().getExtras());
     }
 
 
-    public void requestLFrame()
+    @Override
+    protected Long doInBackground(Integer... params)
     {
         try
         {
-            String request = "LF";
-            PrintWriter pub = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-            pub.println(request);
-            System.out.println("^^^Left frame request successfully sent^^^");
+            InetAddress serverAddress = InetAddress.getByName(ipAddressStr);
+            socket = new Socket(serverAddress, port);
+            System.out.println("^^^Successfully connected to server^^^");
+
+
+
+            //while(!Thread.currentThread().isInterrupted() )
+            //{
+                InputStream sub = socket.getInputStream();
+                System.out.println("^^^Generating new InputStream obj");
+                // !!!???will this be true 32 & 64 bit processors???!!!
+                byte[] buffer = new byte[MATRIX_SIZE];
+                int currPos = 0;
+                int bytesRead = 0;
+
+                //bytesRead = sub.read(buffer, 0, buffer.length);
+                //currPos = bytesRead;
+                do
+                {
+                    bytesRead = sub.read(buffer, currPos, (buffer.length - currPos) );
+
+                    if(bytesRead != -1 && bytesRead != 0)
+                    {
+                        currPos += bytesRead;
+                    }
+                    else
+                    {
+                        break;
+                    }
+
+                }while(bytesRead != -1 && bytesRead != 0);
+
+                System.out.println("^^^recieved image bytes:" + currPos);
+                Mat mat = new Mat(480, 640, CvType.CV_8UC3);
+                mat.put(0, 0, buffer);
+                lFrame = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
+                Utils.matToBitmap(mat, lFrame);
+
+            //}//end of while
+
         }
         catch (UnknownHostException e)
         {
-            e.printStackTrace(); //cant find server :(
+            System.out.println("^^^Ousted");
+            e.printStackTrace();
         }
         catch (IOException e)
         {
-            e.printStackTrace(); //error passing data.
+            System.out.println("^^^Ousted");
+            e.printStackTrace();
         }
-        catch (Exception e)
-        {
-            e.printStackTrace(); //basically, you are screwed.
-        }
+
+
+        cameraOptions.setLRFrames(getlFrame(), getRFrame());
+        //cameraOptions.setArguments(activity.getIntent().getExtras());//this causes crash; why?
+
+        return null;
     }
 
 
-    class ComThread implements Runnable
+    @Override
+    protected void onPostExecute(Long aLong) {
+        super.onPostExecute(aLong);
+        cameraOptions.updateButtons(getlFrame(), getRFrame());
+    }
+
+    public CameraOptions getCameraOptions()
     {
-        @Override
-        public void run()
-        {
-            try
-            {
-                InetAddress serverAddress = InetAddress.getByName(ipAddressStr);
-                socket = new Socket(serverAddress, port);
-                System.out.println("^^^Successfully connected to server^^^");
-
-
-
-                while(!Thread.currentThread().isInterrupted() )
-                {
-                    InputStream sub = socket.getInputStream();
-                    // !!!???will this be true 32 & 64 bit processors???!!!
-                    byte[] imgSizeByteArr = new byte[5];
-                    sub.read(imgSizeByteArr);
-                    String sizeStr = new String(imgSizeByteArr);
-                    //System.out.println("^^^recieved: " + sizeStr);
-                    int size = Integer.parseInt(sizeStr);
-                    byte[] buffer = new byte[size];
-                    int currPos = 0;
-                    int bytesRead = 0;
-
-                    //bytesRead = sub.read(buffer, 0, buffer.length);
-                    //currPos = bytesRead;
-                    do
-                    {
-                        bytesRead = sub.read(buffer, currPos, (buffer.length - currPos) );
-
-                        if(bytesRead != -1 && bytesRead != 0)
-                        {
-                            currPos += bytesRead;
-                        }
-                        else
-                        {
-                            break;
-                        }
-
-                    }while(bytesRead != -1 && bytesRead != 0);
-
-                    System.out.println("^^^recieved image bytes:" + currPos);
-
-                    lFrame = BitmapFactory.decodeByteArray(buffer, 0, buffer.length);
-                }
-
-            }
-            catch (UnknownHostException e)
-            {
-                System.out.println("^^^Ousted");
-                e.printStackTrace();
-            }
-            catch (IOException e)
-            {
-                System.out.println("^^^Ousted");
-                e.printStackTrace();
-            }
-
-
-        }//end of method run()
-
-
-        public void recv()
-        {
-
-        }
-
-
-    }//end of inner class ComThead
-
-
+        return cameraOptions;
+    }
 
 
     public Bitmap getlFrame()
@@ -182,8 +162,5 @@ public class FetchLRFrames
             e.printStackTrace();
         }
     }
-
-
-
 
 }
