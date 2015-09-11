@@ -70,7 +70,7 @@ public class CameraOptions extends Fragment
         leftBtn = (ImageButton) view.findViewById(R.id.left_camera);
         rightBtn = (ImageButton) view.findViewById(R.id.right_camera);
 
-        if(lFrame != null)
+        /*if(lFrame != null)
         {
             leftBtn.setImageBitmap(lFrame);
         }
@@ -78,7 +78,8 @@ public class CameraOptions extends Fragment
         if(rFrame != null)
         {
             rightBtn.setImageBitmap(rFrame);
-        }
+        }*/
+        updateButtons(lFrame, rFrame);
 
 
         leftBtn.setOnTouchListener(new ImageButton.OnTouchListener() {
@@ -116,11 +117,21 @@ public class CameraOptions extends Fragment
         if(lFrame != null)
         {
             leftBtn.setImageBitmap(lFrame);
+            leftBtn.setClickable(true);
+        }
+        else
+        {
+            leftBtn.setClickable(false);
         }
 
         if(rFrame != null)
         {
             rightBtn.setImageBitmap(rFrame);
+            rightBtn.setClickable(true);
+        }
+        else
+        {
+            rightBtn.setClickable(false);
         }
     }
 

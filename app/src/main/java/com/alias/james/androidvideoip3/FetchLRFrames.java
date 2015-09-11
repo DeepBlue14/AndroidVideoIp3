@@ -56,8 +56,8 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
             System.err.println("^^^Failed to load OpenCV @ FetchLRFrames::FetchLRFrames()");
         }
 
-        lFrame = BitmapFactory.decodeResource(resources, R.drawable.camera);
-        rFrame = BitmapFactory.decodeResource(resources, R.drawable.camera);
+        lFrame = BitmapFactory.decodeResource(resources, R.drawable.camera_off);
+        rFrame = BitmapFactory.decodeResource(resources, R.drawable.camera_off);
 
         cameraOptions = new CameraOptions();
         cameraOptions.setLRFrames(getlFrame(), getRFrame());
@@ -75,41 +75,35 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
             System.out.println("^^^Successfully connected to server^^^");
 
 
+            InputStream sub = socket.getInputStream();
+            System.out.println("^^^Generating new InputStream obj");
+            // !!!???will this be true 32 & 64 bit processors???!!!
+            byte[] buffer = new byte[MATRIX_SIZE];
+            int currPos = 0;
+            int bytesRead = 0;
 
-            //while(!Thread.currentThread().isInterrupted() )
-            //{
-                InputStream sub = socket.getInputStream();
-                System.out.println("^^^Generating new InputStream obj");
-                // !!!???will this be true 32 & 64 bit processors???!!!
-                byte[] buffer = new byte[MATRIX_SIZE];
-                int currPos = 0;
-                int bytesRead = 0;
+            //bytesRead = sub.read(buffer, 0, buffer.length);
+            //currPos = bytesRead;
+            do
+            {
+                bytesRead = sub.read(buffer, currPos, (buffer.length - currPos) );
 
-                //bytesRead = sub.read(buffer, 0, buffer.length);
-                //currPos = bytesRead;
-                do
+                if(bytesRead != -1 && bytesRead != 0)
                 {
-                    bytesRead = sub.read(buffer, currPos, (buffer.length - currPos) );
+                    currPos += bytesRead;
+                }
+                else
+                {
+                    break;
+                }
 
-                    if(bytesRead != -1 && bytesRead != 0)
-                    {
-                        currPos += bytesRead;
-                    }
-                    else
-                    {
-                        break;
-                    }
+            }while(bytesRead != -1 && bytesRead != 0);
 
-                }while(bytesRead != -1 && bytesRead != 0);
-
-                System.out.println("^^^recieved image bytes:" + currPos);
-                Mat mat = new Mat(480, 640, CvType.CV_8UC3);
-                mat.put(0, 0, buffer);
-                lFrame = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
-                Utils.matToBitmap(mat, lFrame);
-
-            //}//end of while
-
+            System.out.println("^^^recieved image bytes:" + currPos);
+            Mat mat = new Mat(480, 640, CvType.CV_8UC3);
+            mat.put(0, 0, buffer);
+            lFrame = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
+            Utils.matToBitmap(mat, lFrame);
         }
         catch (UnknownHostException e)
         {
@@ -124,14 +118,14 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
         cameraOptions.setLRFrames(getlFrame(), getRFrame());
-        //cameraOptions.setArguments(activity.getIntent().getExtras());//this causes crash; why?
 
         return null;
     }
 
 
     @Override
-    protected void onPostExecute(Long aLong) {
+    protected void onPostExecute(Long aLong)
+    {
         super.onPostExecute(aLong);
         cameraOptions.updateButtons(getlFrame(), getRFrame());
     }
