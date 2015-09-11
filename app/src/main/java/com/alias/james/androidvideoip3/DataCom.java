@@ -1,9 +1,9 @@
 /*
- * File:   Transmitter.java
+ * File:   DataCom.java
  * Author: James Kuczynski
  * Email: jkuczyns@cs.uml.edu
- * File Description: This class contains protocols TCP/IP data transfer between the app and the
- *                   robot.
+ * File Description: This class sends pixel points to the robot, which will send back a OpenCV
+ *                   matrix with a bounding box around the object.
  *
  * Reference: http://examples.javacodegeeks.com/android/core/socket-core/android-socket-example/
  * Note: Look up TLS and SSL
@@ -39,7 +39,7 @@ public class DataCom extends Activity
 {
     private Socket socket;
 
-    private static final int SERVERPORT = 50000;
+    private static final int SERVERPORT = 50001;
     //private String ipAddressStr = "10.0.2.2";
     private String ipAddressStr = "10.0.4.6"; // robot-lab6
 

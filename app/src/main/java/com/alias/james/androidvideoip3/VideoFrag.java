@@ -43,7 +43,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     private int portInt = 8080;
     //private String camUrlStr = "http:10.0.2.2:8080/stream_viewer?topic=/camera/rgb/image_rect_color";
     private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color"; // robot-lab6
-
+LayoutInflater inflater;
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -56,7 +56,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.camera_layout, container, false);
-        //verifyTouch.initVerifyDialog(getActivity(), inflater);
+        this.inflater = inflater;
         tts = new TextToSpeech(getActivity(), this);
         webView = (WebView) view.findViewById(R.id.web_view);
         webView.getSettings().setDomStorageEnabled(true);
@@ -96,7 +96,8 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
                 System.out.println("ACTION_UP at: (" + event.getX() + ", " + event.getY() + ")");
                 if(isWithinMargin(fingerPressX, fingerReleaseX, 25.0f) && isWithinMargin(fingerPressY, fingerReleaseY, 25.0f) )
                 {
-                    //verifyTouch.show();
+                    verifyTouch.initVerifyDialog(getActivity(), inflater);
+                    verifyTouch.show();
                     //alertDialog.show(); //***James was here***
                     //dataCom.sendMsg("Msg: |" + fingerPressX + "|" + fingerPressY + "|"); // ***James was here***
                     //alertDialog.show(); //***James was here***
@@ -138,7 +139,8 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
         {
              speakOut();
 
-        } else {
+        } else
+        {
             Log.e("TTS", "Initilization Failed!");
         }
     }

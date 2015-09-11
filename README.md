@@ -53,6 +53,11 @@ rosrun object_separator generate_boundingbox    # generate bounding box around o
 
 The idea of controling a robot via a smartphone or tablet is not an entirely new one; however, little research has been done in this area.  Therefore, it would be interesting to modify this package to make it more generalized to work with other robots.  I will make these changes within the next year.
 
+###**TODO**
+
+work on MainActivity-->VideoFrag-->DataCom
+DataCom needs work
+
 
 [1]: http://www.ros.org/
 [2]: http://opencv.org/

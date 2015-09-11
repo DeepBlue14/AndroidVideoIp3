@@ -31,8 +31,8 @@ public class VerifyTouch
         final View view = inflater.inflate(R.layout.verify_touch, null);
 
         verifyDialog = new AlertDialog.Builder(activity)
-                .setTitle("at VerifyBBox")
-                .setMessage("Is this the correct object?")
+                .setTitle("at VerifyTouch")
+                .setMessage("Send point for evaluation?")
                 .setView(view)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
