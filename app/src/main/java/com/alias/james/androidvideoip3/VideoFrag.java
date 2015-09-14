@@ -32,7 +32,6 @@ import org.w3c.dom.Text;
 public class VideoFrag extends Fragment implements WebView.OnTouchListener, TextToSpeech.OnInitListener
 {
     VerifyTouch verifyTouch = new VerifyTouch();
-    private DataCom dataCom = new DataCom();
     private TextToSpeech tts;
     private WebView webView;
     private float fingerPressX = 0;
@@ -68,17 +67,10 @@ LayoutInflater inflater;
         return view;
     }
 
-
-
-
-
     @Override
     public boolean onTouch(View v, MotionEvent event)
     {
         int action = event.getAction();
-
-
-
 
         switch(action)
         {
@@ -97,8 +89,11 @@ LayoutInflater inflater;
                 if(isWithinMargin(fingerPressX, fingerReleaseX, 25.0f) && isWithinMargin(fingerPressY, fingerReleaseY, 25.0f) )
                 {
                     verifyTouch.initVerifyDialog(getActivity(), inflater);
-                    verifyTouch.show();
-                    //alertDialog.show(); //***James was here***
+                    verifyTouch.show(); //this is on another thread :(, so it won't wait before executing next line
+
+                    DataCom dataCom = new DataCom();
+                    dataCom.setMsg("|" + (int) fingerPressX + "|" + (int) fingerPressY + "|");
+                    dataCom.execute(5, 5, 5);
                     //dataCom.sendMsg("Msg: |" + fingerPressX + "|" + fingerPressY + "|"); // ***James was here***
                     //alertDialog.show(); //***James was here***
                 }

@@ -41,7 +41,9 @@ To execute the individual nodes, run:
 ```
 roslaunch openni2_launch openni2_launch         # start sensor
 rosrun web_video_server web_video_server        # send image stream over http
-rosrun image_transport_inverse RosServer        # send right and/or left image pair, and send bound box image
+rosrun ros_ip_transform RosServer               # send right and/or left image pair, and send bound box image
+rosrun ros_ip_transform DataCom                 # recieve point, send bounding-box image
+ 
 rosrun object_separator object_separator        # do lccp object segmentation
 rosrun object_separator generate_boundingbox    # generate bounding box around object--not implmented yet
 ```
