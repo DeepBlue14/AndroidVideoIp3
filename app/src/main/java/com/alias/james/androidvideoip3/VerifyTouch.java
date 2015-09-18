@@ -27,10 +27,10 @@ public class VerifyTouch
     private String msg;
 
 
-    public void initVerifyDialog(Activity activity, LayoutInflater layoutInflater, final String msg)
+    public void initVerifyDialog(Activity activity, LayoutInflater layoutInflater, final String msg, final DataCom dataCom)
     {
         LayoutInflater inflater = layoutInflater;
-        dataCom = new DataCom();
+        this.dataCom = dataCom;
         this.msg = msg;
         dataCom.setUiStuff(activity, layoutInflater);
 

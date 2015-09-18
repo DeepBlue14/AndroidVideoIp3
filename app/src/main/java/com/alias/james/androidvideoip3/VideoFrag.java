@@ -93,7 +93,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
                 System.out.println("ACTION_UP at: (" + event.getX() + ", " + event.getY() + ")");
                 if(isWithinMargin(fingerPressX, fingerReleaseX, 25.0f) && isWithinMargin(fingerPressY, fingerReleaseY, 25.0f) )
                 {
-                    verifyTouch.initVerifyDialog(getActivity(), inflater, "|" + (int) fingerPressX + "|" + (int) fingerPressY + "|");
+                    verifyTouch.initVerifyDialog(getActivity(), inflater, "|" + (int) fingerPressX + "|" + (int) fingerPressY + "|", dataCom);
                     verifyTouch.show();
                 }
                 break;

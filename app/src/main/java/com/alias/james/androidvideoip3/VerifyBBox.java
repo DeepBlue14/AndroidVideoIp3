@@ -28,15 +28,18 @@ public class VerifyBBox
     private AlertDialog.Builder verifyDialog;
     private static Bitmap bBoxBitmap;
     private ImageView imageView;
+    DataCom dataCom;
 
 
-    public void initVerifyDialog(Activity activity, LayoutInflater layoutInflater)
+
+    public void initVerifyDialog(Activity activity, LayoutInflater layoutInflater, final DataCom dataCom)
     {
         LayoutInflater inflater = layoutInflater;
         final View view = inflater.inflate(R.layout.verify_bbox, null);
         imageView = (ImageView) view.findViewById(R.id.verify_image);
         bBoxBitmap = DataCom.getlFrame();
         imageView.setImageBitmap(bBoxBitmap);
+        this.dataCom = dataCom;
 
         verifyDialog = new AlertDialog.Builder(activity)
                 .setTitle("at VerifyBBox")
@@ -46,6 +49,9 @@ public class VerifyBBox
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         System.out.println("Correct obj");
+                        DataCom.SendYesOrNo sendYesOrNo = dataCom.genSendYesOrNo();
+                        //sendYesOrNo.setMsg(true);
+                        sendYesOrNo.execute(5, 5, 5);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

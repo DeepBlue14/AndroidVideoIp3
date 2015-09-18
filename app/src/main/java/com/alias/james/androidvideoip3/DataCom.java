@@ -47,6 +47,7 @@ public class DataCom
     Activity activity;
     LayoutInflater inflater;
     InetAddress serverAddress = null;
+    DataCom dataCom = this;
 
 
     public DataCom() //Resources from Activity
@@ -70,6 +71,40 @@ public class DataCom
     {
         return new Fetch();
     }
+
+
+    public SendYesOrNo genSendYesOrNo()
+    {
+        return new SendYesOrNo();
+    }
+
+
+    public class SendYesOrNo extends AsyncTask<Integer, Integer, Long>
+    {
+
+        @Override
+        protected Long doInBackground(Integer... params) {
+
+            sendFinalVerification(true);
+
+            return null;
+        }
+
+        public void sendFinalVerification(boolean runRobot)
+        {
+            System.out.println("^^^Sending final message...");
+            PrintWriter out = null; // ???Do this once???
+            try {
+                out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
+                out.println("Yes");
+                System.out.println("^^^Final message has been sent");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }//End if inner class SendYesOrNo
 
 
     protected class Fetch extends AsyncTask<Integer, Integer, Long>
@@ -184,7 +219,7 @@ public class DataCom
             }
             else
             {
-                verifyBBox.initVerifyDialog(activity, inflater);
+                verifyBBox.initVerifyDialog(activity, inflater, dataCom);
                 verifyBBox.show();
             }
         }
