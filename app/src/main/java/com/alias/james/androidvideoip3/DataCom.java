@@ -38,18 +38,22 @@ import org.opencv.core.Mat;
 
 public class DataCom
 {
-    private Socket socket;
-    private String m_msg;
-    private static final int SERVER_PORT = 50001;
-    private String ipAddressStr = "10.0.4.6"; // robot-lab6
-    private final int MATRIX_SIZE = 921600;
-    private static Bitmap bBoxBitmap;
-    Activity activity;
-    LayoutInflater inflater;
-    InetAddress serverAddress = null;
-    DataCom dataCom = this;
+    private Socket socket; /** */
+    private String m_msg; /** */
+    private String yOrNMsg; /** */
+    private static final int SERVER_PORT = 50001; /**  */
+    private String ipAddressStr = "10.0.4.6"; /** IP Address of robot.  Currently hard-coded to James's lab machine (robot-lab6) */
+    private final int MATRIX_SIZE = 921600; /** OpenCV matrixes  retrieved from the PrimeSense via ROS are always this size */
+    private static Bitmap bBoxBitmap; /**  */
+    private Activity activity; /**  */
+    private LayoutInflater inflater; /**  */
+    private InetAddress serverAddress = null; /**  */
+    private DataCom dataCom = this; /**  */
 
 
+    /**
+     * This constructor method loads OpenCV.
+     */
     public DataCom() //Resources from Activity
     {
         System.out.println("^^^Starting DataCom...^^^");
@@ -60,6 +64,12 @@ public class DataCom
     }
 
 
+    /**
+     * Sets the member variables.
+     *
+     * @param activity
+     * @param inflater
+     */
     public void setUiStuff(Activity activity, LayoutInflater inflater)
     {
         this.activity = activity;
@@ -67,21 +77,40 @@ public class DataCom
     }
 
 
+    /**
+     * Accessor to create an return a new inner class Fetch object.
+     *
+     * @return new Fetch(), a new Fetch() object
+     */
     public Fetch genFetch()
     {
         return new Fetch();
     }
 
 
+    /**
+     *
+     *
+     * @return
+     */
     public SendYesOrNo genSendYesOrNo()
     {
         return new SendYesOrNo();
     }
 
 
+    /**
+     *
+     */
     public class SendYesOrNo extends AsyncTask<Integer, Integer, Long>
     {
 
+        /**
+         *
+         *
+         * @param params
+         * @return
+         */
         @Override
         protected Long doInBackground(Integer... params) {
 
@@ -90,13 +119,19 @@ public class DataCom
             return null;
         }
 
+
+        /**
+         *
+         *
+         * @param runRobot
+         */
         public void sendFinalVerification(boolean runRobot)
         {
             System.out.println("^^^Sending final message...");
             PrintWriter out = null; // ???Do this once???
             try {
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-                out.println("Yes");
+                out.println(yOrNMsg);
                 System.out.println("^^^Final message has been sent");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -104,23 +139,53 @@ public class DataCom
 
         }
 
+
+        public void setYOrNMsg(String msg)
+        {
+            yOrNMsg = msg;
+        }
+
+
+        public String getYOrNMsg()
+        {
+            return yOrNMsg;
+        }
+
     }//End if inner class SendYesOrNo
 
 
+    /**
+     *
+     */
     protected class Fetch extends AsyncTask<Integer, Integer, Long>
     {
 
+        /**
+         *
+         *
+         * @param msg
+         */
         public void setMsg(String msg) {
             System.out.println("^^^Setting Msg");
             m_msg = msg;
         }
 
 
+        /**
+         *
+         *
+         * @return
+         */
         public String getMsg() {
             return m_msg;
         }
 
 
+        /**
+         *
+         *
+         * @param msg
+         */
         public void sendMsg(String msg) {
             try {
                 System.out.println("^^^Sending message...");
@@ -137,6 +202,9 @@ public class DataCom
         }
 
 
+        /**
+         *
+         */
         private void connect() {
             System.out.println("^^^@ connect()");
 
@@ -153,6 +221,12 @@ public class DataCom
         }
 
 
+        /**
+         *
+         *
+         * @param params
+         * @return
+         */
         @Override
         protected Long doInBackground(Integer... params) {
             try {
@@ -204,6 +278,11 @@ public class DataCom
         }
 
 
+        /**
+         *
+         *
+         * @param aLong
+         */
         @Override
         protected void onPostExecute(Long aLong) {
             super.onPostExecute(aLong);
@@ -224,12 +303,9 @@ public class DataCom
             }
         }
 
-
-       // public Bitmap getlFrame() {
-       //     return bBoxBitmap;
-       // }
-
-
+        /**
+         * Closes the socket.
+         */
         public void close() {
             try {
                 socket.close();
@@ -239,6 +315,13 @@ public class DataCom
         }
 
     }// End of inner class
+
+
+    /**
+     *
+     *
+     * @return
+     */
     public static Bitmap getlFrame() {
         return bBoxBitmap;
     }

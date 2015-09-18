@@ -25,10 +25,10 @@ import android.widget.ImageView;
 
 public class VerifyBBox
 {
-    private AlertDialog.Builder verifyDialog;
-    private static Bitmap bBoxBitmap;
-    private ImageView imageView;
-    DataCom dataCom;
+    private AlertDialog.Builder verifyDialog; /**  */
+    private static Bitmap bBoxBitmap; /**  */
+    private ImageView imageView; /**  */
+    private DataCom dataCom; /**  */
 
 
 
@@ -50,14 +50,17 @@ public class VerifyBBox
                     public void onClick(DialogInterface dialog, int which) {
                         System.out.println("Correct obj");
                         DataCom.SendYesOrNo sendYesOrNo = dataCom.genSendYesOrNo();
-                        //sendYesOrNo.setMsg(true);
+                        sendYesOrNo.setYOrNMsg("Y");
                         sendYesOrNo.execute(5, 5, 5);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ;
+                        System.out.println("Correct obj");
+                        DataCom.SendYesOrNo sendYesOrNo = dataCom.genSendYesOrNo();
+                        sendYesOrNo.setYOrNMsg("N");
+                        sendYesOrNo.execute(5, 5, 5);
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert);
@@ -65,14 +68,102 @@ public class VerifyBBox
     }
 
 
+    /**
+     * Displays the dilaog
+     */
     public void show()
     {
         verifyDialog.show();
     }
 
 
+    /**
+     *
+     *
+     * @param verifyDialog
+     */
+    public void setVerifyDialog(AlertDialog.Builder verifyDialog)
+    {
+        this.verifyDialog = verifyDialog;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
+    public AlertDialog.Builder getVerifyDialog()
+    {
+        return verifyDialog;
+    }
+
+
+    /**
+     *
+     *
+     * @param bBoxBitmap
+     */
+    public void setbBoxBitmap(Bitmap bBoxBitmap)
+    {
+        this.bBoxBitmap = bBoxBitmap;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
+    public Bitmap getbBoxBitmap()
+    {
+        return bBoxBitmap;
+    }
+
+
+    /**
+     *
+     *
+     * @param imageView
+     */
+    public void setImageView(ImageView imageView)
+    {
+        this.imageView = imageView;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
+    public ImageView getImageView()
+    {
+        return imageView;
+    }
+
+
+    /**
+     *
+     *
+     * @param dataCom
+     */
+    public void setDataCom(DataCom dataCom)
+    {
+        this.dataCom = dataCom;
+    }
 
 
 
+    public DataCom getDataCom()
+    {
+        return dataCom;
+    }
 
+
+
+    public String toString()
+    {
+        return "^^^*** METHOD STUB ***^^^";
+    }
 }

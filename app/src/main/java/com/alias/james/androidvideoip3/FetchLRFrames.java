@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.os.AsyncTask;
 
 import java.io.IOException;
@@ -34,18 +35,25 @@ import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
+
 public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 {
-    private Socket socket;
-    private String ipAddressStr = "10.0.4.6";
-    private int port = 50000;
-    private final int MATRIX_SIZE = 921600;
-    private Bitmap lFrame;
-    private Bitmap rFrame;
-    Activity activity;
-    CameraOptions cameraOptions;
+    private Socket socket; /**  */
+    private String ipAddressStr = "10.0.4.6"; /**  */
+    private int port = 50000; /**  */
+    private final int MATRIX_SIZE = 921600; /**  */
+    private Bitmap lFrame; /**  */
+    private Bitmap rFrame; /**  */
+    private Activity activity; /**  */
+    private CameraOptions cameraOptions; /**  */
 
 
+    /**
+     *
+     *
+     * @param resources
+     * @param activity
+     */
     public FetchLRFrames(Resources resources, Activity activity) //Resources from Activity
     {
         System.out.println("^^^Starting FetchLRFrames...^^^");
@@ -60,11 +68,19 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
         rFrame = BitmapFactory.decodeResource(resources, R.drawable.camera_off);
 
         cameraOptions = new CameraOptions();
-        cameraOptions.setLRFrames(getlFrame(), getRFrame());
+        cameraOptions.setLeftBitmap(getlFrame());
+        cameraOptions.setRightBitmap(getRFrame());
         cameraOptions.setArguments(activity.getIntent().getExtras());
     }
 
 
+    /**
+     *
+     *
+     * @param params three (meaningless) numbers
+     *
+     * @return null
+     */
     @Override
     protected Long doInBackground(Integer... params)
     {
@@ -82,8 +98,6 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
             int currPos = 0;
             int bytesRead = 0;
 
-            //bytesRead = sub.read(buffer, 0, buffer.length);
-            //currPos = bytesRead;
             do
             {
                 bytesRead = sub.read(buffer, currPos, (buffer.length - currPos) );
@@ -116,13 +130,18 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
             e.printStackTrace();
         }
 
-
-        cameraOptions.setLRFrames(getlFrame(), getRFrame());
+        cameraOptions.setLeftBitmap(getlFrame());
+        cameraOptions.setRightBitmap(getRFrame());
 
         return null;
     }
 
 
+    /**
+     *
+     *
+     * @param aLong
+     */
     @Override
     protected void onPostExecute(Long aLong)
     {
@@ -130,24 +149,132 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
         cameraOptions.updateButtons(getlFrame(), getRFrame());
     }
 
-    public CameraOptions getCameraOptions()
+
+    /**
+     *
+     *
+     * @param port
+     */
+    public void setPort(int port)
     {
-        return cameraOptions;
+        this.port = port;
     }
 
 
+    /**
+     *
+     *
+     * @return
+     */
+    public int getPort()
+    {
+        return port;
+    }
+
+
+    public void setIpAddressStr(String ipAddressStr)
+    {
+        this.ipAddressStr = ipAddressStr;
+    }
+
+
+    public String getIpAddressStr()
+    {
+        return ipAddressStr;
+    }
+
+
+    /**
+     *
+     *
+     * @param lFrame
+     */
+    public void setlFrame(Bitmap lFrame)
+    {
+        this.lFrame = lFrame;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
     public Bitmap getlFrame()
     {
         return lFrame;
     }
 
 
+    /**
+     *
+     *
+     * @param rFrame
+     */
+    public void setRFrame(Bitmap rFrame)
+    {
+        this.rFrame = rFrame;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
     public Bitmap getRFrame()
     {
         return rFrame;
     }
 
 
+    /**
+     *
+     *
+     * @param activity
+     */
+    public void setActivity(Activity activity)
+    {
+        this.activity = activity;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
+    public Activity getActivity()
+    {
+        return activity;
+    }
+
+
+    /**
+     *
+     *
+     * @param cameraOptions
+     */
+    public void setCameraOptions(CameraOptions cameraOptions)
+    {
+        this.cameraOptions = cameraOptions;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
+    public CameraOptions getCameraOptions()
+    {
+        return cameraOptions;
+    }
+
+
+    /**
+     *
+     */
     public void close()
     {
         try {
@@ -157,4 +284,4 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
         }
     }
 
-}
+}// End of class FetchLRFrames

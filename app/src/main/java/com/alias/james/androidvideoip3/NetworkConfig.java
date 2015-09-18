@@ -31,14 +31,20 @@ import android.widget.EditText;
 
 public class NetworkConfig
 {
-    private String ipAddressStr = "10.0.4.6";
-    private int portInt = 8080;
-    private String leftCamTopic = "/usb_cam1/image_raw";
-    private String rightCamTopic = "/usb_cam2/image_raw";
-    private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color";
-    private AlertDialog.Builder networkDialog;
+    private String ipAddressStr = "10.0.4.6"; /**  */
+    private int portInt = 8080; /**  */
+    private String leftCamTopic = "/usb_cam1/image_raw"; /**  */
+    private String rightCamTopic = "/usb_cam2/image_raw"; /**  */
+    private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color"; /**  */
+    private AlertDialog.Builder networkDialog; /**  */
 
 
+    /**
+     *
+     *
+     * @param activity
+     * @param layoutInflater
+     */
     public void initNetworkConfigDialog(Activity activity, LayoutInflater layoutInflater)
     {
         LayoutInflater inflater = layoutInflater;
@@ -72,16 +78,159 @@ public class NetworkConfig
     }
 
 
-    private void setUrl(String ipAddressStr, int portInt)
+    /**
+     *
+     *
+     * @param ipAddressStr
+     */
+    public void setIpAddressStr(String ipAddressStr)
     {
-        camUrlStr =  "http:" + ipAddressStr + ":" + portInt + "/stream_viewer?topic=/camera/rgb/image_rect_color";
+        this.ipAddressStr = ipAddressStr;
     }
 
 
+    /**
+     *
+     *
+     * @return
+     */
+    public String getIpAddressStr()
+    {
+        return ipAddressStr;
+    }
+
+
+    /**
+     *
+     *
+     * @param portInt
+     */
+    public void setPortInt(int portInt)
+    {
+        this.portInt = portInt;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
+    public int getPortInt()
+    {
+        return portInt;
+    }
+
+
+    /**
+     *
+     *
+     * @param leftCamTopic
+     */
+    public void setLeftCamTopic(String leftCamTopic)
+    {
+        this.leftCamTopic = leftCamTopic;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
+    public String getLeftCamTopic()
+    {
+        return leftCamTopic;
+    }
+
+
+    /**
+     *
+     *
+     * @param rightCamTopic
+     */
+    public void setRightCamTopic(String rightCamTopic)
+    {
+        this.rightCamTopic = rightCamTopic;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
+    public String getRightCamTopic()
+    {
+        return rightCamTopic;
+    }
+
+
+    /**
+     *
+     *
+     * @param camUrlStr
+     */
+    public void setCamUrlStr(String camUrlStr)
+    {
+        this.camUrlStr = camUrlStr;
+    }
+
+    /**
+     *
+     *
+     * @return
+     */
+    public String getCamUrlStr()
+    {
+        return camUrlStr;
+    }
+
+    /**
+     *
+     *
+     * @param networkDialog
+     */
+    public void setNetworkDialog(AlertDialog.Builder networkDialog)
+    {
+        this.networkDialog = networkDialog;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
     public AlertDialog.Builder getNetworkDialog()
     {
         return networkDialog;
     }
 
 
-}
+    /**
+     * Concatinate the ipaddress and port in order to set up the http address.
+     * @see #ipAddressStr
+     * @see #portInt
+     *
+     * @param ipAddressStr
+     * @param portInt
+     */
+    private void setUrl(String ipAddressStr, int portInt)
+    {
+        camUrlStr =  "http:" + ipAddressStr + ":" + portInt + "/stream_viewer?topic=/camera/rgb/image_rect_color";
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
+    public String toString()
+    {
+        return "^^^*** METHOD STUB ***^^^";
+    }
+
+
+} // End of class NetworkConfig

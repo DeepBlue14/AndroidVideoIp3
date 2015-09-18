@@ -22,11 +22,17 @@ import android.view.MenuItem;
 
 public class MainActivity extends FragmentActivity implements OnCameraSelectedListener
 {
-    private Menu menu;
-    private FetchLRFrames fetchLRFrames;
-    private NetworkConfig networkConfig = new NetworkConfig();
-    private Login login = new Login();
+    private Menu menu; /**  */
+    private FetchLRFrames fetchLRFrames; /**  */
+    private NetworkConfig networkConfig = new NetworkConfig(); /**  */
+    private Login login = new Login(); /**  */
 
+
+    /**
+     *
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -41,10 +47,6 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
             {
                 fetchLRFrames = new FetchLRFrames(getResources(), this);
                 fetchLRFrames.execute(5, 5, 5);
-                /*CameraOptions cameraOptions = new CameraOptions();
-                cameraOptions.setLRFrames(fetchLRFrames.getlFrame(), fetchLRFrames.getRFrame());
-                cameraOptions.setArguments(getIntent().getExtras());*/
-                //cameraOptions.setArguments(activity.getIntent().getExtras())
 
                 getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fetchLRFrames.getCameraOptions()).commit();
             }
@@ -52,6 +54,13 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
     }
 
 
+    /**
+     *
+     *
+     * @param menu
+     *
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -63,6 +72,13 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
     }
 
 
+    /**
+     *
+     *
+     * @param item
+     *
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -88,6 +104,11 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
     }
 
 
+    /**
+     * Handles the fragment transactions (i.e. swaps in and out the different fragments).
+     *
+     * @param position
+     */
     @Override
     public void onImgSelected(int position)
     {
@@ -102,4 +123,4 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
         transaction.commit();
 
     }
-}
+} // End of class MainActivity

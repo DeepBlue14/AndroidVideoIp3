@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
+<!--
+ ! File:   camera_options.xml
+ ! Author: James Kuczynski
+ ! Email: jkuczyns@cs.uml.edu
+ ! File Description: This layout file corresponds to class CameraOptions.
+ !
+ ! Last Modified: 9/18/2015
+ !-->
+
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >

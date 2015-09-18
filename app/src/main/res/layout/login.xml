@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
+<!--
+ ! File:   login.xml
+ ! Author: James Kuczynski
+ ! Email: jkuczyns@cs.uml.edu
+ ! File Description: Login dialog UI.  Currently not in use.
+ !
+ ! Last Modified: 9/18/2015
+ !-->
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="wrap_content"

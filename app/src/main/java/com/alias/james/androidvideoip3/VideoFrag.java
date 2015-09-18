@@ -31,21 +31,26 @@ import org.w3c.dom.Text;
 
 public class VideoFrag extends Fragment implements WebView.OnTouchListener, TextToSpeech.OnInitListener
 {
-    VerifyTouch verifyTouch = new VerifyTouch();
-    private TextToSpeech tts;
-    private WebView webView;
-    private float fingerPressX = 0;
-    private float fingerPressY = 0;
-    private float fingerReleaseX = 0;
-    private float fingerReleaseY = 0;
-    private String ipAddressStr = "10.0.4.6"; // robot-lab6
-    private int portInt = 8080;
+    VerifyTouch verifyTouch = new VerifyTouch(); /**  */
+    private TextToSpeech tts; /**  */
+    private WebView webView; /**  */
+    private float fingerPressX = 0; /**  */
+    private float fingerPressY = 0; /**  */
+    private float fingerReleaseX = 0; /**  */
+    private float fingerReleaseY = 0; /**  */
+    private String ipAddressStr = "10.0.4.6"; /** robot-lab6 */
+    private int portInt = 8080; /**  */
     //private String camUrlStr = "http:10.0.2.2:8080/stream_viewer?topic=/camera/rgb/image_rect_color";
-    private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color"; // robot-lab6
-    LayoutInflater inflater;
-    DataCom dataCom;
+    private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color"; /**  */
+    LayoutInflater inflater; /** */
+    DataCom dataCom; /** */
 
 
+    /**
+     *
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
@@ -55,6 +60,15 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     }
 
 
+    /**
+     *
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     *
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -72,6 +86,15 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
         return view;
     }
 
+
+    /**
+     *
+     *
+     * @param v
+     * @param event
+     *
+     * @return
+     */
     @Override
     public boolean onTouch(View v, MotionEvent event)
     {
@@ -108,6 +131,15 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     }
 
 
+    /**
+     *
+     *
+     * @param pressInt
+     * @param releaseInt
+     * @param margin
+     *
+     * @return
+     */
     public boolean isWithinMargin(float pressInt, float releaseInt, float margin)
     {
         if(Math.abs(pressInt - releaseInt) - margin < 0)
@@ -121,6 +153,11 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     }
 
 
+    /**
+     *
+     *
+     * @param status
+     */
     @Override
     public void onInit(int status)
     {
@@ -140,6 +177,9 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     }
 
 
+    /**
+     *
+     */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void speakOut()
     {
@@ -148,24 +188,39 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     }
 
 
+    /**
+     *
+     *
+     * @param ipAddressStr
+     * @param portInt
+     */
     public void setCamUrlStr(String ipAddressStr, int portInt)
     {
         camUrlStr = "http:" + ipAddressStr + ":" + portInt + "/stream_viewer?topic=/camera/rgb/image_rect_color";
     }
 
 
+    /**
+     *
+     */
     public void startWebCamStream()
     {
         webView.loadUrl(camUrlStr);
     }
 
 
+    /**
+     *
+     */
     public void stopWebCamStream()
     {
         webView.stopLoading();
     }
 
 
+    /**
+     *
+     */
     @Override
     public void onDestroy()
     {

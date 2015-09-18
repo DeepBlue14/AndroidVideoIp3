@@ -22,9 +22,16 @@ import android.widget.EditText;
 
 public class Login
 {
-    private AlertDialog.Builder loginDialog;
-    private MenuItem adminCb;
+    private AlertDialog.Builder loginDialog; /** */
+    private MenuItem adminCb; /** */
 
+
+    /**
+     * Initializes the dialog.
+     *
+     * @param activity
+     * @param layoutInflater
+     */
     public void initLoginDialog(Activity activity, LayoutInflater layoutInflater)
     {
         LayoutInflater inflater = layoutInflater;
@@ -63,14 +70,16 @@ public class Login
     }
 
 
+    /**
+     *
+     *
+     * @param checkbox
+     */
     public void show(MenuItem checkbox)
     {
         adminCb = checkbox;
         loginDialog.show();
     }
-
-
-    //helper methods
 
 
 

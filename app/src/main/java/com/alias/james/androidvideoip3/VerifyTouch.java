@@ -22,11 +22,19 @@ import android.view.View;
 
 public class VerifyTouch
 {
-    private AlertDialog.Builder verifyDialog;
-    private DataCom dataCom;
-    private String msg;
+    private AlertDialog.Builder verifyDialog; /**  */
+    private DataCom dataCom; /**  */
+    private String msg; /** */
 
 
+    /**
+     * This method initializes and customizes the dialog.
+     *
+     * @param activity
+     * @param layoutInflater
+     * @param msg
+     * @param dataCom
+     */
     public void initVerifyDialog(Activity activity, LayoutInflater layoutInflater, final String msg, final DataCom dataCom)
     {
         LayoutInflater inflater = layoutInflater;
@@ -60,8 +68,91 @@ public class VerifyTouch
     }
 
 
+    /**
+     * This is a pass-through method which calls show() on the dialog UI
+     */
     public void show()
     {
         verifyDialog.show();
     }
-}
+
+
+    /**
+     *
+     *
+     * @param verifyDialog
+     */
+    public void setVerifyDialog(AlertDialog.Builder verifyDialog)
+    {
+        this.verifyDialog = verifyDialog;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
+    public AlertDialog.Builder getVerifyDialog()
+    {
+        return verifyDialog;
+    }
+
+
+    /**
+     *
+     *
+     * @param dataCom
+     */
+    public void setDataCom(DataCom dataCom)
+    {
+        this.dataCom = dataCom;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
+    public DataCom getDataCom()
+    {
+        return dataCom;
+    }
+
+
+    /**
+     *
+     *
+     * @param msg
+     */
+    public void setMsg(String msg)
+    {
+        this.msg = msg;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
+    public String getMsg()
+    {
+        return msg;
+    }
+
+
+    /**
+     *
+     *
+     * @return
+     */
+    public String toString()
+    {
+        return "^^^*** METHOD STUB ***^^^";
+    }
+
+
+
+} // End of class VerifyTouch

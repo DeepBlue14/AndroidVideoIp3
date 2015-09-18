@@ -17,5 +17,10 @@ package com.alias.james.androidvideoip3;
 
 public interface OnCameraSelectedListener
 {
+    /**
+     *
+     *
+     * @param position
+     */
     public void onImgSelected(int position);
 }

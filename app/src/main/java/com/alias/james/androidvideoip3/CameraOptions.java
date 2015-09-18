@@ -7,99 +7,81 @@
  *
  * References:
  *
- * Last Modified: 8/11/2015
+ * Last Modified: 9/18/2015
  */
 
 package com.alias.james.androidvideoip3;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.Camera;
 import android.support.v4.app.Fragment;
-import android.media.Image;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ListView;
 
 
 public class CameraOptions extends Fragment
 {
-    String[] cameraArr = {"Left Camera", "Right Camera"};
-    OnCameraSelectedListener mCallback;
-    Bitmap lFrame;
-    Bitmap rFrame;
-    ImageButton leftBtn;
-    ImageButton rightBtn;
+    private String[] cameraArr = {"Left Camera", "Right Camera"};/** Array of cameras */
+    private OnCameraSelectedListener cameraCallback; /**  */
+    private Bitmap leftBitmap; /**  */
+    private Bitmap rightBitmap; /**  */
+    private ImageButton leftImgBtn; /**  */
+    private ImageButton rightImgBtn; /**  */
 
 
-    public CameraOptions()
-    {
-        ;
-    }
-
-
+    /**
+     * Default onCreate method.
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        //System.out.println("^^^HERE (1)");
         super.onCreate(savedInstanceState);
-        //System.out.println("^^^HERE (2)");
-
-
     }
 
 
-    public void setLRFrames(Bitmap lFrame, Bitmap rFrame)
-    {
-        this.lFrame = lFrame;
-        this.rFrame = rFrame;
-
-    }
-
-
+    /**
+     * Initializes the both left and right camera image buttons.  It then calls updateButtons
+     * to set each button's image.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState state of fragment from the last time it was invoked
+     * @return the current View
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.camera_options, container, false);
-        leftBtn = (ImageButton) view.findViewById(R.id.left_camera);
-        rightBtn = (ImageButton) view.findViewById(R.id.right_camera);
+        leftImgBtn = (ImageButton) view.findViewById(R.id.left_camera);
+        rightImgBtn = (ImageButton) view.findViewById(R.id.right_camera);
 
-        /*if(lFrame != null)
-        {
-            leftBtn.setImageBitmap(lFrame);
-        }
-
-        if(rFrame != null)
-        {
-            rightBtn.setImageBitmap(rFrame);
-        }*/
-        updateButtons(lFrame, rFrame);
+        updateButtons(leftBitmap, rightBitmap);
 
 
-        leftBtn.setOnTouchListener(new ImageButton.OnTouchListener() {
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
+        leftImgBtn.setOnTouchListener(new ImageButton.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
                 System.out.println("Left button selected");
 
-                mCallback.onImgSelected(0);
+                cameraCallback.onImgSelected(0);
 
                 return true;
             }
         });
 
 
-        rightBtn.setOnTouchListener(new ImageButton.OnTouchListener() {
+        rightImgBtn.setOnTouchListener(new ImageButton.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 System.out.println("Right button selected");
 
-                mCallback.onImgSelected(1);
+                cameraCallback.onImgSelected(1); // !!!???Hard coded for camera 1???!!!
 
                 return true;
             }
@@ -110,54 +92,58 @@ public class CameraOptions extends Fragment
     }
 
 
-    public void updateButtons(Bitmap lFrame, Bitmap rFrame)
+    /**
+     * Sets an image to each button.  If a valid bitmap associated with a button's corrisponding
+     * camera can be found, it is assigned that bitmap, otherwise it is assigned a
+     * "no camera found" bitmap.
+     *
+     * @param leftBitmap the bitmap for the left camera options button.
+     * @param rightBitmap the bitmap for the left camera options button.
+     */
+    public void updateButtons(Bitmap leftBitmap, Bitmap rightBitmap)
     {
-        setLRFrames(lFrame, rFrame);
+        setLeftBitmap(leftBitmap);
+        setRightBitmap(rightBitmap);
 
-        if(lFrame != null)
+        if(leftBitmap != null)
         {
-            leftBtn.setImageBitmap(lFrame);
-            leftBtn.setClickable(true);
+            leftImgBtn.setImageBitmap(leftBitmap);
+            leftImgBtn.setClickable(true);
         }
         else
         {
-            leftBtn.setClickable(false);
+            leftImgBtn.setClickable(false);
         }
 
-        if(rFrame != null)
+        if(rightBitmap != null)
         {
-            rightBtn.setImageBitmap(rFrame);
-            rightBtn.setClickable(true);
+            rightImgBtn.setImageBitmap(rightBitmap);
+            rightImgBtn.setClickable(true);
         }
         else
         {
-            rightBtn.setClickable(false);
+            rightImgBtn.setClickable(false);
         }
     }
 
 
-    public ImageButton getRightBtn()
-    {
-        return rightBtn;
-    }
-
-
-    public ImageButton getLeftBtn()
-    {
-        return leftBtn;
-    }
-
-
-
+    /**
+     * Calls onStart() method of superclass.
+     */
     @Override
     public void onStart()
     {
         super.onStart();
-
-
     }
 
 
+    /**
+     * Attempt to cast cameraCallback.  This will fail if OnCameraSelectionListener has not
+     * been implemented.
+     * @see #cameraCallback
+     *
+     * @param activity
+     */
     @Override
     public void onAttach(Activity activity)
     {
@@ -165,7 +151,7 @@ public class CameraOptions extends Fragment
 
         try
         {
-            mCallback = (OnCameraSelectedListener) activity;
+            cameraCallback = (OnCameraSelectedListener) activity;
         }catch (ClassCastException e)
         {
             throw new ClassCastException(activity.toString() + "must implement OnCameraSelectionListener");
@@ -173,4 +159,159 @@ public class CameraOptions extends Fragment
     }
 
 
-}
+    // Accessor and mutator methods
+
+    /**
+     * Mutator method to assign member variable.
+     * @see #cameraArr
+     *
+     * @param cameraArr
+     */
+    public void setCameraArr(String[] cameraArr)
+    {
+        this.cameraArr = cameraArr;
+    }
+
+
+    /**
+     * Accessor.
+     * @see #cameraArr
+     *
+     * @return cameraArr;
+     */
+    public String[] getCameraArr()
+    {
+        return cameraArr;
+    }
+
+
+    /**
+     * Mutator method to assign member variable.
+     * @see #cameraCallback
+     *
+     * @param cameraCallback
+     */
+    public void setCameraCallback(OnCameraSelectedListener cameraCallback)
+    {
+        this.cameraCallback = cameraCallback;
+    }
+
+
+    /**
+     * Accessor.
+     * @see #cameraCallback
+     *
+     * @return cameraCallback
+     */
+    public OnCameraSelectedListener getCameraCallback()
+    {
+        return cameraCallback;
+    }
+
+
+    /**
+     * Mutator method to assign member variable.
+     * @see #leftBitmap
+     *
+     * @param leftBitmap
+     */
+    public void setLeftBitmap(Bitmap leftBitmap)
+    {
+        this.leftBitmap = leftBitmap;
+    }
+
+
+    /**
+     * Accessor.
+     * @see #leftBitmap
+     *
+     * @return leftBitmap
+     */
+    public Bitmap getLeftBitmap()
+    {
+        return leftBitmap;
+    }
+
+
+    /**
+     * Mutator.
+     * @see #rightBitmap
+     *
+     * @param rightBitmap
+     */
+    public void setRightBitmap(Bitmap rightBitmap)
+    {
+        this.rightBitmap = rightBitmap;
+    }
+
+
+    /**
+     * Accessor.
+     * @see #rightBitmap
+     *
+     * @return rightBitmap
+     */
+    public Bitmap getRightBitmap()
+    {
+        return rightBitmap;
+    }
+
+
+    /**
+     * Mutator.
+     * @see #rightImgBtn
+     *
+     * @param rightImgBtn
+     */
+    public void setRightImgBtn(ImageButton rightImgBtn)
+    {
+        this.rightImgBtn = rightImgBtn;
+    }
+
+
+    /**
+     * Mutator.
+     *
+     * @return rightImgBtn
+     */
+    public ImageButton getRightImgBtn()
+    {
+        return rightImgBtn;
+    }
+
+
+    /**
+     * Mutator.
+     * @see #leftImgBtn
+     *
+     * @param leftImgBtn
+     */
+    public void setLeftImgBtn(ImageButton leftImgBtn)
+    {
+        this.leftImgBtn = leftImgBtn;
+    }
+
+
+    /**
+     * Accessor.
+     *
+     * @return leftImgBtn
+     */
+    public ImageButton getLeftImgBtn()
+    {
+        return leftImgBtn;
+    }
+
+
+    /**
+     * TODO: implement this method with relevent data.
+     *
+     * @return
+     */
+    public String toString()
+    {
+        return "^^^***empty toString() method***^^^";
+    }
+
+
+}// End of class CameraOptions
