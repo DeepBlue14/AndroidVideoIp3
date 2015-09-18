@@ -29,6 +29,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import android.view.LayoutInflater;
 
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
@@ -42,8 +43,9 @@ public class DataCom
     private static final int SERVER_PORT = 50001;
     private String ipAddressStr = "10.0.4.6"; // robot-lab6
     private final int MATRIX_SIZE = 921600;
-    private Bitmap bBoxBitmap;
+    private static Bitmap bBoxBitmap;
     Activity activity;
+    LayoutInflater inflater;
     InetAddress serverAddress = null;
 
 
@@ -54,6 +56,13 @@ public class DataCom
         if (!OpenCVLoader.initDebug()) {
             System.err.println("^^^Failed to load OpenCV @ FetchLRFrames::FetchLRFrames()");
         }
+    }
+
+
+    public void setUiStuff(Activity activity, LayoutInflater inflater)
+    {
+        this.activity = activity;
+        this.inflater = inflater;
     }
 
 
@@ -164,13 +173,26 @@ public class DataCom
         protected void onPostExecute(Long aLong) {
             super.onPostExecute(aLong);
             //display popup "is this the object" with bounding-box
-
+            VerifyBBox verifyBBox = new VerifyBBox();
+            if (activity == null)
+            {
+                System.out.println("^^^ERROR: activity is null");
+            }
+            else if(inflater == null)
+            {
+                System.out.println("^^^ERROR: inflater is null");
+            }
+            else
+            {
+                verifyBBox.initVerifyDialog(activity, inflater);
+                verifyBBox.show();
+            }
         }
 
 
-        public Bitmap getlFrame() {
-            return bBoxBitmap;
-        }
+       // public Bitmap getlFrame() {
+       //     return bBoxBitmap;
+       // }
 
 
         public void close() {
@@ -181,5 +203,9 @@ public class DataCom
             }
         }
 
+    }// End of inner class
+    public static Bitmap getlFrame() {
+        return bBoxBitmap;
     }
-}
+
+}// End of outer class DataCom

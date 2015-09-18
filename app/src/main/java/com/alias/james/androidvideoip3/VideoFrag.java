@@ -51,6 +51,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     {
         super.onCreate(savedInstanceState);
         dataCom = new DataCom();
+
     }
 
 
@@ -59,6 +60,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     {
         View view = inflater.inflate(R.layout.camera_layout, container, false);
         this.inflater = inflater;
+        dataCom.setUiStuff(getActivity(), inflater);
         tts = new TextToSpeech(getActivity(), this);
         webView = (WebView) view.findViewById(R.id.web_view);
         webView.getSettings().setDomStorageEnabled(true);
@@ -91,17 +93,8 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
                 System.out.println("ACTION_UP at: (" + event.getX() + ", " + event.getY() + ")");
                 if(isWithinMargin(fingerPressX, fingerReleaseX, 25.0f) && isWithinMargin(fingerPressY, fingerReleaseY, 25.0f) )
                 {
-                    verifyTouch.initVerifyDialog(getActivity(), inflater);
-                    verifyTouch.show(); //this is on another thread :(, so it won't wait before executing next line
-
-
-                    DataCom.Fetch myFetcher = dataCom.genFetch();
-                    myFetcher.setMsg("|" + (int) fingerPressX + "|" + (int) fingerPressY + "|");
-                    myFetcher.execute(5, 5, 5);
-                    //dataCom.setMsg("|" + (int) fingerPressX + "|" + (int) fingerPressY + "|");
-                    //dataCom.execute(5, 5, 5);
-                    //dataCom.sendMsg("Msg: |" + fingerPressX + "|" + fingerPressY + "|"); // ***James was here***
-                    //alertDialog.show(); //***James was here***
+                    verifyTouch.initVerifyDialog(getActivity(), inflater, "|" + (int) fingerPressX + "|" + (int) fingerPressY + "|");
+                    verifyTouch.show();
                 }
                 break;
             case MotionEvent.ACTION_CANCEL:

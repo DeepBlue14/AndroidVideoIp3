@@ -23,11 +23,17 @@ import android.view.View;
 public class VerifyTouch
 {
     private AlertDialog.Builder verifyDialog;
+    private DataCom dataCom;
+    private String msg;
 
 
-    public void initVerifyDialog(Activity activity, LayoutInflater layoutInflater)
+    public void initVerifyDialog(Activity activity, LayoutInflater layoutInflater, final String msg)
     {
         LayoutInflater inflater = layoutInflater;
+        dataCom = new DataCom();
+        this.msg = msg;
+        dataCom.setUiStuff(activity, layoutInflater);
+
         final View view = inflater.inflate(R.layout.verify_touch, null);
 
         verifyDialog = new AlertDialog.Builder(activity)
@@ -38,6 +44,9 @@ public class VerifyTouch
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         System.out.println("Send coors");
+                        DataCom.Fetch myFetcher = dataCom.genFetch();
+                        myFetcher.setMsg(msg);
+                        myFetcher.execute(5, 5, 5);
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

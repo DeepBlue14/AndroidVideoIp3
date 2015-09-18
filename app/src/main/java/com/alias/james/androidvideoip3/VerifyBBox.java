@@ -16,20 +16,27 @@ package com.alias.james.androidvideoip3;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 public class VerifyBBox
 {
     private AlertDialog.Builder verifyDialog;
+    private static Bitmap bBoxBitmap;
+    private ImageView imageView;
 
 
     public void initVerifyDialog(Activity activity, LayoutInflater layoutInflater)
     {
         LayoutInflater inflater = layoutInflater;
         final View view = inflater.inflate(R.layout.verify_bbox, null);
+        imageView = (ImageView) view.findViewById(R.id.verify_image);
+        bBoxBitmap = DataCom.getlFrame();
+        imageView.setImageBitmap(bBoxBitmap);
 
         verifyDialog = new AlertDialog.Builder(activity)
                 .setTitle("at VerifyBBox")

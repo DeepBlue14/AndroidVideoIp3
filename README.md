@@ -31,7 +31,7 @@ This package provides a UI to control a robot (specifically, [Rethink Baxter][6]
 - [pcl_ros][3] Jade
 - A [Rethink Baxter][6] robot
 - An Android device (or emulator)
-- [image_ip_transform][7]
+- [ros_ip_transform][7]
 - [object_separator][8]
 
 
