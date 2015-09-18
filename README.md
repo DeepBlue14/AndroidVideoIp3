@@ -15,7 +15,7 @@
 - [Project Synopsis](#project-synopsis)
 - [Dependencies](#dependencies)
 - [Install](#install)
-- [Fugure Work](#future-work)
+- [Future Work](#future-work)
 
 
 ###**Project Synopsis**
@@ -31,7 +31,7 @@ This package provides a UI to control a robot (specifically, [Rethink Baxter][6]
 - [pcl_ros][3] Jade
 - A [Rethink Baxter][6] robot
 - An Android device (or emulator)
-- [image_transport_inverse][7]
+- [image_ip_transform][7]
 - [object_separator][8]
 
 
@@ -57,8 +57,7 @@ The idea of controling a robot via a smartphone or tablet is not an entirely new
 
 ###**TODO**
 
-work on MainActivity-->VideoFrag-->DataCom
-DataCom needs work
+@ DataCom: Each time a new instance of this class is created, it forgets the previous connection and attempts to re-connect to the server.
 
 
 [1]: http://www.ros.org/

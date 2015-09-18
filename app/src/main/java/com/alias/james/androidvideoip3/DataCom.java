@@ -35,162 +35,151 @@ import org.opencv.android.Utils;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
-public class DataCom extends AsyncTask<Integer, Integer, Long>
+public class DataCom
 {
     private Socket socket;
-    private String msg;
+    private String m_msg;
     private static final int SERVER_PORT = 50001;
     private String ipAddressStr = "10.0.4.6"; // robot-lab6
     private final int MATRIX_SIZE = 921600;
     private Bitmap bBoxBitmap;
     Activity activity;
+    InetAddress serverAddress = null;
 
 
     public DataCom() //Resources from Activity
     {
         System.out.println("^^^Starting DataCom...^^^");
 
-        if(!OpenCVLoader.initDebug() )
-        {
+        if (!OpenCVLoader.initDebug()) {
             System.err.println("^^^Failed to load OpenCV @ FetchLRFrames::FetchLRFrames()");
         }
     }
 
 
-    public void setMsg(String msg)
+    public Fetch genFetch()
     {
-        this.msg = msg;
+        return new Fetch();
     }
 
 
-    public String getMsg()
+    protected class Fetch extends AsyncTask<Integer, Integer, Long>
     {
-        return msg;
-    }
 
-
-    public void sendMsg(String msg)
-    {
-        try {
-            System.out.println("^^^Sending message...");
-            PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
-            out.println(msg);
-            System.out.println("^^^Message has been sent");
-        }catch (UnknownHostException e)
-        {
-            e.printStackTrace();
-        }catch (IOException e)
-        {
-            e.printStackTrace();
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void connect()
-    {
-        InetAddress serverAddress = null;
-        try {
-            serverAddress = InetAddress.getByName(ipAddressStr);
-            socket = new Socket(serverAddress, SERVER_PORT); //!!!connect in a separate method--same goes for FetchLRFrames!!!
-            System.out.println("^^^Successfully connected to server^^^");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        public void setMsg(String msg) {
+            System.out.println("^^^Setting Msg");
+            m_msg = msg;
         }
 
-    }
+
+        public String getMsg() {
+            return m_msg;
+        }
 
 
-    @Override
-    protected Long doInBackground(Integer... params)
-    {
-        try
-        {
-            /*if(socket.isClosed() )
-            {
-                connect();
-            }*/
-            InetAddress serverAddress = InetAddress.getByName(ipAddressStr);
-            socket = new Socket(serverAddress, SERVER_PORT); //!!!connect in a separate method--same goes for FetchLRFrames!!!
-            System.out.println("^^^Successfully connected to server^^^");
+        public void sendMsg(String msg) {
+            try {
+                System.out.println("^^^Sending message...");
+                PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true); // ???Do this once???
+                out.println(msg);
+                System.out.println("^^^Message has been sent");
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-            sendMsg(getMsg() );
 
-            InputStream sub = socket.getInputStream();
-            System.out.println("^^^Generating new InputStream obj");
-            // !!!???will this be true 32 & 64 bit processors???!!!
-            byte[] buffer = new byte[MATRIX_SIZE];
-            int currPos = 0;
-            int bytesRead = 0;
+        private void connect() {
+            System.out.println("^^^@ connect()");
 
-            //bytesRead = sub.read(buffer, 0, buffer.length);
-            //currPos = bytesRead;
-            do
-            {
-                bytesRead = sub.read(buffer, currPos, (buffer.length - currPos) );
+            try {
+                serverAddress = InetAddress.getByName(ipAddressStr);
+                socket = new Socket(serverAddress, SERVER_PORT); //!!!connect in a separate method--same goes for FetchLRFrames!!!
+                System.out.println("^^^Successfully connected to server^^^");
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-                if(bytesRead != -1 && bytesRead != 0)
-                {
-                    currPos += bytesRead;
+        }
+
+
+        @Override
+        protected Long doInBackground(Integer... params) {
+            try {
+                if (serverAddress == null) {
+                    System.out.println("^^^Connecting");
+                    connect();
                 }
-                else
-                {
-                    break;
-                }
+                //InetAddress serverAddress = InetAddress.getByName(ipAddressStr);
+                //socket = new Socket(serverAddress, SERVER_PORT); //!!!connect in a separate method--same goes for FetchLRFrames!!!
+                //System.out.println("^^^Successfully connected to server^^^");
 
-            }while(bytesRead != -1 && bytesRead != 0);
+                sendMsg(getMsg());
 
-            System.out.println("^^^recieved image bytes @ DataCom::doInBackground(...):" + currPos);
-            Mat mat = new Mat(480, 640, CvType.CV_8UC3);
-            mat.put(0, 0, buffer);
-            bBoxBitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
-            Utils.matToBitmap(mat, bBoxBitmap);
+                InputStream sub = socket.getInputStream(); // ???Do this once???
+                System.out.println("^^^Generating new InputStream obj");
+                // !!!???will this be true 32 & 64 bit processors???!!!
+                byte[] buffer = new byte[MATRIX_SIZE];
+                int currPos = 0;
+                int bytesRead = 0;
+
+                //bytesRead = sub.read(buffer, 0, buffer.length);
+                //currPos = bytesRead;
+                do {
+                    bytesRead = sub.read(buffer, currPos, (buffer.length - currPos));
+
+                    if (bytesRead != -1 && bytesRead != 0) {
+                        currPos += bytesRead;
+                    } else {
+                        break;
+                    }
+
+                } while (bytesRead != -1 && bytesRead != 0);
+
+                System.out.println("^^^recieved image bytes @ DataCom::doInBackground(...):" + currPos);
+                Mat mat = new Mat(480, 640, CvType.CV_8UC3);
+                mat.put(0, 0, buffer);
+                bBoxBitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
+                Utils.matToBitmap(mat, bBoxBitmap);
+            } catch (UnknownHostException e) {
+                System.out.println("^^^Ousted");
+                e.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("^^^Ousted");
+                e.printStackTrace();
+            }
+
+
+            return null;
         }
-        catch (UnknownHostException e)
-        {
-            System.out.println("^^^Ousted");
-            e.printStackTrace();
-        }
-        catch (IOException e)
-        {
-            System.out.println("^^^Ousted");
-            e.printStackTrace();
+
+
+        @Override
+        protected void onPostExecute(Long aLong) {
+            super.onPostExecute(aLong);
+            //display popup "is this the object" with bounding-box
+
         }
 
 
-        return null;
-    }
-
-
-    @Override
-    protected void onPostExecute(Long aLong)
-    {
-        super.onPostExecute(aLong);
-        //display popup "is this the object" with bounding-box
-
-    }
-
-
-
-    public Bitmap getlFrame()
-    {
-        return bBoxBitmap;
-    }
-
-
-
-
-    public void close()
-    {
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        public Bitmap getlFrame() {
+            return bBoxBitmap;
         }
-    }
 
+
+        public void close() {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }

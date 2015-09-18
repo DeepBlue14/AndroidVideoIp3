@@ -42,12 +42,15 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     private int portInt = 8080;
     //private String camUrlStr = "http:10.0.2.2:8080/stream_viewer?topic=/camera/rgb/image_rect_color";
     private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color"; // robot-lab6
-LayoutInflater inflater;
+    LayoutInflater inflater;
+    DataCom dataCom;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
+        dataCom = new DataCom();
     }
 
 
@@ -91,9 +94,12 @@ LayoutInflater inflater;
                     verifyTouch.initVerifyDialog(getActivity(), inflater);
                     verifyTouch.show(); //this is on another thread :(, so it won't wait before executing next line
 
-                    DataCom dataCom = new DataCom();
-                    dataCom.setMsg("|" + (int) fingerPressX + "|" + (int) fingerPressY + "|");
-                    dataCom.execute(5, 5, 5);
+
+                    DataCom.Fetch myFetcher = dataCom.genFetch();
+                    myFetcher.setMsg("|" + (int) fingerPressX + "|" + (int) fingerPressY + "|");
+                    myFetcher.execute(5, 5, 5);
+                    //dataCom.setMsg("|" + (int) fingerPressX + "|" + (int) fingerPressY + "|");
+                    //dataCom.execute(5, 5, 5);
                     //dataCom.sendMsg("Msg: |" + fingerPressX + "|" + fingerPressY + "|"); // ***James was here***
                     //alertDialog.show(); //***James was here***
                 }
