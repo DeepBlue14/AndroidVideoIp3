@@ -2,7 +2,9 @@
  * File:   MainActivity.java
  * Author: James Kuczynski
  * Email: jkuczyns@cs.uml.edu
- * File Description: This class handles administrator login.
+ * File Description: This class handles administrator login.  After logging in, the admin is able
+ *                   to modify parameters (such as the expected IP address of the robot server)
+ *                   which a regular user would is denied access to.
  *
  * References:
  *
@@ -71,7 +73,7 @@ public class Login
 
 
     /**
-     *
+     * Initializes the checkbox object and displays the login dialog to the user.
      *
      * @param checkbox
      */
@@ -79,6 +81,17 @@ public class Login
     {
         adminCb = checkbox;
         loginDialog.show();
+    }
+
+
+    /**
+     * TODO: implement.
+     *
+     * @return
+     */
+    public String toString()
+    {
+        return "^^^*** METHOD STUB ***^^^";
     }
 
 

@@ -25,16 +25,16 @@ import android.widget.ImageButton;
 
 public class CameraOptions extends Fragment
 {
-    private String[] cameraArr = {"Left Camera", "Right Camera"};/** Array of cameras */
-    private OnCameraSelectedListener cameraCallback; /**  */
-    private Bitmap leftBitmap; /**  */
-    private Bitmap rightBitmap; /**  */
-    private ImageButton leftImgBtn; /**  */
-    private ImageButton rightImgBtn; /**  */
+    private String[] cameraArr = {"Left Camera", "Right Camera"};/** Array of cameras. */
+    private OnCameraSelectedListener cameraCallback; /** Callback object to handle events. */
+    private Bitmap leftBitmap; /** Bitmap contained within left ImageButton. */
+    private Bitmap rightBitmap; /** Bitmap contained within right ImageButton. */
+    private ImageButton leftImgBtn; /** The left ImageButton. */
+    private ImageButton rightImgBtn; /** The right ImageButton. */
 
 
     /**
-     * Default onCreate method.
+     * Default onCreate method.  Calls onCreate() of superclass.
      *
      * @param savedInstanceState
      */
@@ -271,6 +271,7 @@ public class CameraOptions extends Fragment
 
     /**
      * Mutator.
+     * @see #rightImgBtn
      *
      * @return rightImgBtn
      */
@@ -294,6 +295,7 @@ public class CameraOptions extends Fragment
 
     /**
      * Accessor.
+     * @see #leftImgBtn
      *
      * @return leftImgBtn
      */

@@ -61,7 +61,8 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
 
 
     /**
-     *
+     * Initializes the UI components related to this fragment, especially setting up the WebView
+     * settings.
      *
      * @param inflater
      * @param container
@@ -88,7 +89,10 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
 
 
     /**
-     *
+     * Is called when the user touches the video.  If the action is detected as a touch instead of
+     * a slide
+     * @see #isWithinMargin(float, float, float)
+     * then a dialog appears asking the user if he wishes the location evaluated by the robot.
      *
      * @param v
      * @param event
@@ -132,7 +136,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
 
 
     /**
-     *
+     * Checks to see if the user event was a press or a slide.
      *
      * @param pressInt
      * @param releaseInt
@@ -154,7 +158,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
 
 
     /**
-     *
+     * Sets up the speech module.
      *
      * @param status
      */
@@ -178,7 +182,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
 
 
     /**
-     *
+     * When called, this method invokes speak(...).
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void speakOut()
@@ -189,7 +193,9 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
 
 
     /**
-     *
+     * Mutator.
+     * @see #ipAddressStr
+     * @see #portInt
      *
      * @param ipAddressStr
      * @param portInt
@@ -201,7 +207,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
 
 
     /**
-     *
+     * Starts accepting the video stream.
      */
     public void startWebCamStream()
     {
@@ -210,7 +216,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
 
 
     /**
-     *
+     * Stops accepting the video stream.
      */
     public void stopWebCamStream()
     {
@@ -219,7 +225,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
 
 
     /**
-     *
+     * Invokes the onDestroy of the superclass, and shuts down the speech module.
      */
     @Override
     public void onDestroy()

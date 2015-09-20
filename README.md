@@ -60,7 +60,7 @@ The idea of controling a robot via a smartphone or tablet is not an entirely new
 1) Enable BOTH cameras.
 2) see link for handling scrolling and still getting correct location on webview:
         http://stackoverflow.com/questions/10808387/android-getting-exact-scroll-position-in-listview
-3) Finish dealing with the backend stuff.
+3) Finish dealing with the backend stuff (last .java file in navigator).
 
 [1]: http://www.ros.org/
 [2]: http://opencv.org/

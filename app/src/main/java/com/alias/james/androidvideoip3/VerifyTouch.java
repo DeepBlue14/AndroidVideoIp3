@@ -78,6 +78,8 @@ public class VerifyTouch
 
 
     /**
+     * Mutator.
+     * @see #verifyDialog
      *
      *
      * @param verifyDialog
@@ -89,7 +91,8 @@ public class VerifyTouch
 
 
     /**
-     *
+     * Accessor.
+     * @see #verifyDialog
      *
      * @return
      */
@@ -100,7 +103,8 @@ public class VerifyTouch
 
 
     /**
-     *
+     * Mutator.
+     * @see #dataCom
      *
      * @param dataCom
      */
@@ -111,7 +115,8 @@ public class VerifyTouch
 
 
     /**
-     *
+     * Accessor.
+     * @see #dataCom
      *
      * @return
      */
@@ -122,7 +127,8 @@ public class VerifyTouch
 
 
     /**
-     *
+     * Mutator.
+     * @see #msg
      *
      * @param msg
      */
@@ -133,7 +139,8 @@ public class VerifyTouch
 
 
     /**
-     *
+     * Accessor.
+     * @see #msg
      *
      * @return
      */
@@ -144,7 +151,7 @@ public class VerifyTouch
 
 
     /**
-     *
+     * TODO: implement this.
      *
      * @return
      */

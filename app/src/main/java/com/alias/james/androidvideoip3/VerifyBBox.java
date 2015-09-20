@@ -31,7 +31,13 @@ public class VerifyBBox
     private DataCom dataCom; /**  */
 
 
-
+    /**
+     * Initializes the VerifyBBox dialog.
+     *
+     * @param activity
+     * @param layoutInflater
+     * @param dataCom
+     */
     public void initVerifyDialog(Activity activity, LayoutInflater layoutInflater, final DataCom dataCom)
     {
         LayoutInflater inflater = layoutInflater;
@@ -78,7 +84,8 @@ public class VerifyBBox
 
 
     /**
-     *
+     * Mutator.
+     * @see #verifyDialog
      *
      * @param verifyDialog
      */
@@ -89,7 +96,8 @@ public class VerifyBBox
 
 
     /**
-     *
+     * Accessor.
+     * @see #verifyDialog
      *
      * @return
      */
@@ -100,7 +108,8 @@ public class VerifyBBox
 
 
     /**
-     *
+     * Mutator.
+     * @see #bBoxBitmap
      *
      * @param bBoxBitmap
      */
@@ -111,7 +120,8 @@ public class VerifyBBox
 
 
     /**
-     *
+     * Accessor.
+     * @see #bBoxBitmap
      *
      * @return
      */
@@ -122,7 +132,8 @@ public class VerifyBBox
 
 
     /**
-     *
+     * Mutator.
+     * @see #imageView
      *
      * @param imageView
      */
@@ -133,7 +144,8 @@ public class VerifyBBox
 
 
     /**
-     *
+     * Accessor.
+     * @see #imageView
      *
      * @return
      */
@@ -144,7 +156,8 @@ public class VerifyBBox
 
 
     /**
-     *
+     * Mutator.
+     * @see #dataCom
      *
      * @param dataCom
      */
@@ -154,14 +167,23 @@ public class VerifyBBox
     }
 
 
-
+    /**
+     * Accessor.
+     * @see #dataCom
+     *
+     * @return
+     */
     public DataCom getDataCom()
     {
         return dataCom;
     }
 
 
-
+    /**
+     * TODO: implement this.
+     *
+     * @return
+     */
     public String toString()
     {
         return "^^^*** METHOD STUB ***^^^";

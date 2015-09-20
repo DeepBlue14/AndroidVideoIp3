@@ -10,12 +10,13 @@
  *             http://stackoverflow.com/questions/2586301/set-inputtype-for-an-edittext
  *             http://stackoverflow.com/questions/2784081/android-create-spinner-programmatically-from-array
  *
+ * <p>
  *             (for backend)
  *             nmap -sP 10.0.4.1/24 #displays all computers on the network
  *             nmap -PN 10.0.4.6 #displays open ports on the specified computer
  *             https://www.digitalocean.com/community/tutorials/how-to-use-nmap-to-scan-for-open-ports-on-your-vps
  *             http://stackoverflow.com/questions/478898/how-to-execute-a-command-and-get-output-of-command-within-c
- *
+ * </p>
  *
  * Last Modified: 8/11/2015
  */
@@ -40,7 +41,8 @@ public class NetworkConfig
 
 
     /**
-     *
+     * Initializes the network configuration dialog (which can only be accessed by
+     * an administrator).
      *
      * @param activity
      * @param layoutInflater
@@ -60,7 +62,7 @@ public class NetworkConfig
                         EditText userName = (EditText) view.findViewById(R.id.ip_address);
                         EditText password = (EditText) view.findViewById(R.id.port);
 
-                        if (!userName.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
+                        if (!userName.getText().toString().isEmpty() && !password.getText().toString().isEmpty() ) {
                             ipAddressStr = userName.getText().toString();
                             portInt = Integer.parseInt(password.getText().toString());
                         }
@@ -79,7 +81,8 @@ public class NetworkConfig
 
 
     /**
-     *
+     * Mutator.
+     * @see #ipAddressStr
      *
      * @param ipAddressStr
      */
@@ -90,7 +93,8 @@ public class NetworkConfig
 
 
     /**
-     *
+     * Accessor.
+     * @see #ipAddressStr
      *
      * @return
      */
@@ -101,7 +105,8 @@ public class NetworkConfig
 
 
     /**
-     *
+     * Mutator.
+     * @see #portInt
      *
      * @param portInt
      */
@@ -112,7 +117,8 @@ public class NetworkConfig
 
 
     /**
-     *
+     * Accessor.
+     * @see #portInt
      *
      * @return
      */
@@ -123,7 +129,8 @@ public class NetworkConfig
 
 
     /**
-     *
+     * Mutator.
+     * @see #leftCamTopic
      *
      * @param leftCamTopic
      */
@@ -134,7 +141,8 @@ public class NetworkConfig
 
 
     /**
-     *
+     * Accessor.
+     * @see #leftCamTopic
      *
      * @return
      */
@@ -145,7 +153,8 @@ public class NetworkConfig
 
 
     /**
-     *
+     * Mutator.
+     * @see #rightCamTopic
      *
      * @param rightCamTopic
      */
@@ -156,7 +165,8 @@ public class NetworkConfig
 
 
     /**
-     *
+     * Accessor.
+     * @see #rightCamTopic
      *
      * @return
      */
@@ -167,7 +177,8 @@ public class NetworkConfig
 
 
     /**
-     *
+     * Mutator.
+     * @see #camUrlStr
      *
      * @param camUrlStr
      */
@@ -177,7 +188,8 @@ public class NetworkConfig
     }
 
     /**
-     *
+     * Accessor.
+     * @see #camUrlStr
      *
      * @return
      */
@@ -187,7 +199,8 @@ public class NetworkConfig
     }
 
     /**
-     *
+     * Mutator.
+     * @see #networkDialog
      *
      * @param networkDialog
      */
@@ -198,7 +211,8 @@ public class NetworkConfig
 
 
     /**
-     *
+     * Accessor.
+     * @see #networkDialog
      *
      * @return
      */
@@ -223,7 +237,7 @@ public class NetworkConfig
 
 
     /**
-     *
+     * TODO: implement this.
      *
      * @return
      */

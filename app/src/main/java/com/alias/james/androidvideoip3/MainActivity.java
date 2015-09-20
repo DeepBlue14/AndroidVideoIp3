@@ -1,7 +1,19 @@
 /*
+ * Project: AndroidVideoIp3
  * File:   MainActivity.java
+ * Files: CameraOptions.java, DataCom.java, FetchLRFrames.java, Login.java, MainActivity.java,
+ *        NetworkConfig.java, OnCameraSelectedListener.java, VerifyBBox.java, VerifyTouch.java,
+ *        VideoFrag.java,
+ *        Camera_off.jpg,
+ *        activity_main.xml, camera_layout.xml, camera_options.xml, login.xml, network_config.xml,
+ *        verify_bbox.xml, verify_touch.xml,
+ *        menu_main.xml,
+ *        strings.xml,
+ *        styles.xml,
+ *        AndroidManifest.xml
  * Author: James Kuczynski
  * Email: jkuczyns@cs.uml.edu
+ * Project Description:
  * File Description: This is the main activity of the project.
  *
  * References: http://jimiz.net/2011/09/find-computers-network-nmap-free-tool/#axzz3iWOiNQn4
@@ -29,7 +41,7 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
 
 
     /**
-     *
+     * Initializes the application by starting the thread to probe the left and right cameras.
      *
      * @param savedInstanceState
      */
@@ -55,7 +67,7 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
 
 
     /**
-     *
+     * Initializes the menu.
      *
      * @param menu
      *
@@ -73,7 +85,7 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
 
 
     /**
-     *
+     * Handles the menu UI, displaying the relevent sub-menu if an option is selected.
      *
      * @param item
      *

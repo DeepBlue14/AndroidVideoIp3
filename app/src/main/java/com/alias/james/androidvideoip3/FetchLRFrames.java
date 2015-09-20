@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Camera;
 import android.os.AsyncTask;
 
 import java.io.IOException;
@@ -38,18 +37,18 @@ import org.opencv.core.Mat;
 
 public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 {
-    private Socket socket; /**  */
-    private String ipAddressStr = "10.0.4.6"; /**  */
-    private int port = 50000; /**  */
-    private final int MATRIX_SIZE = 921600; /**  */
-    private Bitmap lFrame; /**  */
-    private Bitmap rFrame; /**  */
-    private Activity activity; /**  */
-    private CameraOptions cameraOptions; /**  */
+    private Socket socket; /** To connect to robot */
+    private String ipAddressStr = "10.0.4.6"; /** IP address of robot host.  Currently hard-coded to robot-lab6 (James Kuczynski's computer). */
+    private int port = 50000; /** Is the port used for this connection. */
+    private final int MATRIX_SIZE = 921600; /** Is the size of the OpenCV matrix sent. */
+    private Bitmap lFrame; /** Is a bitmap created from the OpenCV matrix passed from the robot's left camera */
+    private Bitmap rFrame; /** Is a bitmap created from the OpenCV matrix passed from the robot's right camera */
+    private Activity activity; /** is a reference to the MainActivity's Acitivy object */
+    private CameraOptions cameraOptions; /** Is a reference to the fragment which allows the user to choose the left or right camera */
 
 
     /**
-     *
+     * This constructor method initializes variables and loads the OpenCV JNI modules.
      *
      * @param resources
      * @param activity
@@ -75,7 +74,9 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
     /**
-     *
+     * Connects to the server.
+     * TODO: The connection should take place elsewhere, so it can update
+     * TODO (cont): See how class DataCom does this.
      *
      * @param params three (meaningless) numbers
      *
@@ -138,7 +139,7 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
     /**
-     *
+     * Updates the buttons with the fetched images.
      *
      * @param aLong
      */
@@ -151,7 +152,8 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
     /**
-     *
+     * Mutator.
+     * @see #port
      *
      * @param port
      */
@@ -162,7 +164,8 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
     /**
-     *
+     * Accessor.
+     * @see #port
      *
      * @return
      */
@@ -172,12 +175,24 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
     }
 
 
+    /**
+     * Mutator.
+     * @see #ipAddressStr
+     *
+     * @param ipAddressStr
+     */
     public void setIpAddressStr(String ipAddressStr)
     {
         this.ipAddressStr = ipAddressStr;
     }
 
 
+    /**
+     * Accessor.
+     * @see #ipAddressStr
+     *
+     * @return
+     */
     public String getIpAddressStr()
     {
         return ipAddressStr;
@@ -185,7 +200,8 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
     /**
-     *
+     * Mutator.
+     * @see #lFrame
      *
      * @param lFrame
      */
@@ -196,7 +212,8 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
     /**
-     *
+     * Accessor.
+     * @see #lFrame
      *
      * @return
      */
@@ -207,7 +224,8 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
     /**
-     *
+     * Mutator.
+     * @see #rFrame
      *
      * @param rFrame
      */
@@ -218,7 +236,8 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
     /**
-     *
+     * Accessor.
+     * @see #rFrame
      *
      * @return
      */
@@ -229,7 +248,8 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
     /**
-     *
+     * Mutator.
+     * @see #activity
      *
      * @param activity
      */
@@ -240,7 +260,8 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
     /**
-     *
+     * Accessor.
+     * @see #activity
      *
      * @return
      */
@@ -251,7 +272,8 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
     /**
-     *
+     * Mutator.
+     * @see #cameraOptions
      *
      * @param cameraOptions
      */
@@ -262,7 +284,8 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
     /**
-     *
+     * Accessor.
+     * @see #cameraOptions
      *
      * @return
      */
@@ -273,7 +296,7 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
 
 
     /**
-     *
+     * Closes the socket.
      */
     public void close()
     {
@@ -282,6 +305,17 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    /**
+     * TODO: implement this with relevant data.
+     *
+     * @return
+     */
+    public String toString()
+    {
+        return "^^^*** METHOD STUB ***^^^";
     }
 
 }// End of class FetchLRFrames

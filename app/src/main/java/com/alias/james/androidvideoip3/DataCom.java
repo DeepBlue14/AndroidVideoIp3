@@ -38,17 +38,17 @@ import org.opencv.core.Mat;
 
 public class DataCom
 {
-    private Socket socket; /** */
-    private String m_msg; /** */
-    private String yOrNMsg; /** */
-    private static final int SERVER_PORT = 50001; /**  */
+    private Socket socket; /** Socket object to handle traffic between robot and Android device. */
+    private String m_msg; /** Contains the (x, y) coordinates to be sent to the robot for evaluation as a string sequence: "|x|y|". */
+    private String yOrNMsg; /** Message sent to the robot to confirm or deny that the object with the box drawn around it was the correct one (will be Y or N). */
+    private static final int SERVER_PORT = 50001; /** Is the port that DataCom will use by default. */
     private String ipAddressStr = "10.0.4.6"; /** IP Address of robot.  Currently hard-coded to James's lab machine (robot-lab6) */
     private final int MATRIX_SIZE = 921600; /** OpenCV matrixes  retrieved from the PrimeSense via ROS are always this size */
-    private static Bitmap bBoxBitmap; /**  */
-    private Activity activity; /**  */
-    private LayoutInflater inflater; /**  */
-    private InetAddress serverAddress = null; /**  */
-    private DataCom dataCom = this; /**  */
+    private static Bitmap bBoxBitmap; /** Is the bitmap with bounding box drawn around the object the robot thinks the user selected. */
+    private Activity activity; /** A reference to the UI's Activity object (to be used to inflate an alert dialog. */
+    private LayoutInflater inflater; /** A referecne to teh UI's LayoutInflater object. */
+    private InetAddress serverAddress = null; /** The address of the robot. */
+    private DataCom dataCom = this; /** Is an object to self. */
 
 
     /**
@@ -65,7 +65,7 @@ public class DataCom
 
 
     /**
-     * Sets the member variables.
+     * Sets the UI member variables.
      *
      * @param activity
      * @param inflater
@@ -89,7 +89,7 @@ public class DataCom
 
 
     /**
-     *
+     * Generates an instance of its subclass SendYesOrNo and returns it to the caller.
      *
      * @return
      */
@@ -100,15 +100,20 @@ public class DataCom
 
 
     /**
-     *
+     * Sends a reply to the robot "Y" or "N", telling it whether to grasp the object, or to
+     * terminate and reset.
+     * TODO: Should a negative reply merely terminate the robots current grasp sequence, or should
+     * TODO (cont): it cause the robot to reasses, the image for a different object?
      */
     public class SendYesOrNo extends AsyncTask<Integer, Integer, Long>
     {
 
         /**
-         *
+         * Calls sendFinalVerification, which writes "Y" or "N" to the TCP socket.
+         * @see #sendFinalVerification(boolean)
          *
          * @param params
+         *
          * @return
          */
         @Override
@@ -121,7 +126,7 @@ public class DataCom
 
 
         /**
-         *
+         * Sends "Y" or "N" over the TCP/IP stream to the robot.
          *
          * @param runRobot
          */
@@ -140,12 +145,24 @@ public class DataCom
         }
 
 
+        /**
+         * Mutator.
+         * @see #yOrNMsg
+         *
+         * @param msg
+         */
         public void setYOrNMsg(String msg)
         {
             yOrNMsg = msg;
         }
 
 
+        /**
+         * Accessor.
+         * @see #yOrNMsg
+         *
+         * @return
+         */
         public String getYOrNMsg()
         {
             return yOrNMsg;
@@ -154,14 +171,12 @@ public class DataCom
     }//End if inner class SendYesOrNo
 
 
-    /**
-     *
-     */
     protected class Fetch extends AsyncTask<Integer, Integer, Long>
     {
 
         /**
-         *
+         * Mutator.
+         * @see #m_msg
          *
          * @param msg
          */
@@ -172,7 +187,8 @@ public class DataCom
 
 
         /**
-         *
+         * Accessor.
+         * @see #m_msg
          *
          * @return
          */
@@ -182,7 +198,8 @@ public class DataCom
 
 
         /**
-         *
+         * Sends the message to the robot via the socket.
+         * @see #socket
          *
          * @param msg
          */
@@ -203,7 +220,7 @@ public class DataCom
 
 
         /**
-         *
+         * Connects the Android device (client) to the robot (server).
          */
         private void connect() {
             System.out.println("^^^@ connect()");
@@ -222,7 +239,9 @@ public class DataCom
 
 
         /**
-         *
+         * Checks to see of a connection to the server has already been made.  If it has not been
+         * done, it calls connect().  It then sends the pixel coordinates to the robot, and
+         * receives a OpenCV matrix.
          *
          * @param params
          * @return
@@ -279,7 +298,11 @@ public class DataCom
 
 
         /**
-         *
+         * This method is implicitly called after doInBackground(Integer...) finishes executing.
+         * @see #doInBackground(Integer...)
+         * It adds creates a custom AlertDialog to display the bitmap containing the object with
+         * a bounding box, and prompts the user to choose whether the object was the correct
+         * one.
          *
          * @param aLong
          */
@@ -318,7 +341,8 @@ public class DataCom
 
 
     /**
-     *
+     * Accesssor.
+     * @see #bBoxBitmap
      *
      * @return
      */
