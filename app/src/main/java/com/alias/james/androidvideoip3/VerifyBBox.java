@@ -25,10 +25,10 @@ import android.widget.ImageView;
 
 public class VerifyBBox
 {
-    private AlertDialog.Builder verifyDialog; /**  */
-    private static Bitmap bBoxBitmap; /**  */
-    private ImageView imageView; /**  */
-    private DataCom dataCom; /**  */
+    private AlertDialog.Builder verifyDialog; /** Is the dialog which will ask the user if the the object with a bounding-box is the correct one. */
+    private static Bitmap bBoxBitmap; /** Is the image with the selected object surrounded by a bounding-box. */
+    private ImageView imageView; /** Is the imageview that the bitmap bBoxBitmap will be stored it. */
+    private DataCom dataCom; /** Is the class which handles robot/Android IP traffic after a initial location has been selected by the user. */
 
 
     /**

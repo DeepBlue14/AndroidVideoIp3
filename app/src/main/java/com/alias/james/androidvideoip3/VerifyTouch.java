@@ -22,9 +22,9 @@ import android.view.View;
 
 public class VerifyTouch
 {
-    private AlertDialog.Builder verifyDialog; /**  */
-    private DataCom dataCom; /**  */
-    private String msg; /** */
+    private AlertDialog.Builder verifyDialog; /** Is the dialog which asks the user if they want the point to be sent to the robot for evaluation. */
+    private DataCom dataCom; /** Is the class which handles robot/Android IP traffic after a point has been touched. */
+    private String msg; /** Is the message in the form "|x|y|" of the point touched, which will be sent to the robot for evaluation. */
 
 
     /**

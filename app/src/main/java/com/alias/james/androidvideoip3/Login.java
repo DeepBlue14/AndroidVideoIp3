@@ -24,8 +24,8 @@ import android.widget.EditText;
 
 public class Login
 {
-    private AlertDialog.Builder loginDialog; /** */
-    private MenuItem adminCb; /** */
+    private AlertDialog.Builder loginDialog; /** Is the dialog which allows the user to gain administrator privileges. */
+    private MenuItem adminCb; /** Is the checkbox which is checked if the current user is logged in as administrator. */
 
 
     /**

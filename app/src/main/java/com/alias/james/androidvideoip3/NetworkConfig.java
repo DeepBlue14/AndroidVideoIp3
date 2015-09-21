@@ -32,12 +32,12 @@ import android.widget.EditText;
 
 public class NetworkConfig
 {
-    private String ipAddressStr = "10.0.4.6"; /**  */
-    private int portInt = 8080; /**  */
-    private String leftCamTopic = "/usb_cam1/image_raw"; /**  */
-    private String rightCamTopic = "/usb_cam2/image_raw"; /**  */
-    private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color"; /**  */
-    private AlertDialog.Builder networkDialog; /**  */
+    private String ipAddressStr = "10.0.4.6"; /** Is the IP address of the robot.  Currently hard-coded to James K's lab machine robot-lab6. */
+    private int portInt = 8080; /** Is the port that the video stream will be sent to. */
+    private String leftCamTopic = "/usb_cam1/image_raw"; /** Is the ROS topic that the left camera will stream to. */
+    private String rightCamTopic = "/usb_cam2/image_raw"; /** Is the ROS topic that the right camera will stream to. */
+    private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color"; /** Is the HTTP address the robot will stream video to. */
+    private AlertDialog.Builder networkDialog; /** Is the dialog which will present networking options (if the user is logged in as administrator. */
 
 
     /**

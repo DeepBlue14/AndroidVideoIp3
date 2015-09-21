@@ -35,7 +35,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 
-public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
+public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap this in a outer class!!!
 {
     private Socket socket; /** To connect to robot */
     private String ipAddressStr = "10.0.4.6"; /** IP address of robot host.  Currently hard-coded to robot-lab6 (James Kuczynski's computer). */
@@ -87,6 +87,11 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
     {
         try
         {
+            /*
+            * !!! Do this connecting stuff in a separate function (like DataCom does)
+            * so that it can be called multiple times without trying to re-connect
+            * (which breaks it).
+            */
             InetAddress serverAddress = InetAddress.getByName(ipAddressStr);
             socket = new Socket(serverAddress, port);
             System.out.println("^^^Successfully connected to server^^^");
@@ -179,7 +184,7 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long>
      * Mutator.
      * @see #ipAddressStr
      *
-     * @param ipAddressStr
+     * @param ipAddressStr is the IP address of the robot
      */
     public void setIpAddressStr(String ipAddressStr)
     {

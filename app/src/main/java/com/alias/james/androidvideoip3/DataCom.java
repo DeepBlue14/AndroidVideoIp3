@@ -59,7 +59,7 @@ public class DataCom
         System.out.println("^^^Starting DataCom...^^^");
 
         if (!OpenCVLoader.initDebug()) {
-            System.err.println("^^^Failed to load OpenCV @ FetchLRFrames::FetchLRFrames()");
+            System.err.println("^^^Failed to load OpenCV @ DataCom::DataCom()");
         }
     }
 

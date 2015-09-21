@@ -34,10 +34,10 @@ import android.view.MenuItem;
 
 public class MainActivity extends FragmentActivity implements OnCameraSelectedListener
 {
-    private Menu menu; /**  */
-    private FetchLRFrames fetchLRFrames; /**  */
-    private NetworkConfig networkConfig = new NetworkConfig(); /**  */
-    private Login login = new Login(); /**  */
+    private Menu menu; /** The apps menu. */
+    private FetchLRFrames fetchLRFrames; /** Reference to the class which fetches a frame from each of the cameras (if the are both connected). */
+    private NetworkConfig networkConfig = new NetworkConfig(); /** Is a reference to the class which handles the administrator networking options. */
+    private Login login = new Login(); /** Contains the login dialog required if a user wishes to gain administrator privileges. */
 
 
     /**
