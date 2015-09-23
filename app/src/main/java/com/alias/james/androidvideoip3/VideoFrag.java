@@ -39,6 +39,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     private float fingerReleaseX = 0; /** Is the x coordinate of the finger release action. */
     private float fingerReleaseY = 0; /** Is the y coordinate of the finger release action. */
     private String ipAddressStr = "10.0.4.6"; /** IP address of the robot, currently hard-coded to James K's lab machine: robot-lab6 */
+    private String topic = "/camera/rgb/image_rect_color";
     private int portInt = 8080; /** Default port for the robot's video stream to use. */
     //private String camUrlStr = "http:10.0.2.2:8080/stream_viewer?topic=/camera/rgb/image_rect_color";
     private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color"; /** Default URL that of the robot's video feed. */
@@ -419,6 +420,29 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
 
     /**
      * Mutator.
+     * @see #topic
+     *
+     * @param topic
+     */
+    public void setTopic(String topic)
+    {
+        this.topic = topic;
+    }
+
+
+    /**
+     * Accessor.
+     * @see #topic
+     *
+     * @return
+     */
+    public String getTopic() {
+        return topic;
+    }
+
+
+    /**
+     * Mutator.
      * @see #portInt
      *
      * @param portInt
@@ -449,9 +473,9 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
      * @param ipAddressStr
      * @param portInt
      */
-    public void setCamUrlStr(String ipAddressStr, int portInt)
+    public void setCamUrlStr(String ipAddressStr, int portInt, String topic)
     {
-        camUrlStr = "http:" + ipAddressStr + ":" + portInt + "/stream_viewer?topic=/camera/rgb/image_rect_color";
+        camUrlStr = "http:" + ipAddressStr + ":" + portInt + "/stream_viewer?topic=" + topic;
     }
 
 

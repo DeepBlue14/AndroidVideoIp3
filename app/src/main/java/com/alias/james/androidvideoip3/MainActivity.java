@@ -35,7 +35,8 @@ import android.view.MenuItem;
 public class MainActivity extends FragmentActivity implements OnCameraSelectedListener
 {
     private Menu menu; /** The apps menu. */
-    private FetchLRFrames fetchLRFrames; /** Reference to the class which fetches a frame from each of the cameras (if the are both connected). */
+    private FetchLRFrames fetchLeftFrame; /** Reference to the class which fetches a frame from the left camera (if it is connected). */
+    private FetchLRFrames fetchRightFrame; /** Reference to the class which fetches a frame from the right camera (if it is connected). */
     private NetworkConfig networkConfig = new NetworkConfig(); /** Is a reference to the class which handles the administrator networking options. */
     private Login login = new Login(); /** Contains the login dialog required if a user wishes to gain administrator privileges. */
 
@@ -49,18 +50,19 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        //fetchLRFrames = new FetchLRFrames(getResources(), this);
-        //fetchLRFrames.execute(5, 5, 5);
         setContentView(R.layout.activity_main);
 
         if(findViewById(R.id.fragment_container) != null)
         {
             if(savedInstanceState == null)
             {
-                fetchLRFrames = new FetchLRFrames(getResources(), this);
-                fetchLRFrames.execute(5, 5, 5);
+                //this block should also be redone every time the user goes to the CameraOptions UI fragment
+                fetchLeftFrame = new FetchLRFrames(getResources(), this, FetchLRFrames.CameraLoc.LEFT);
+                fetchRightFrame = new FetchLRFrames(getResources(), this, FetchLRFrames.CameraLoc.RIGHT);
+                fetchLeftFrame.execute(5, 5, 5);
+                fetchRightFrame.execute(5, 5, 5);
 
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fetchLRFrames.getCameraOptions()).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fetchLeftFrame.getCameraOptions()).commit();
             }
         }
     }
@@ -135,4 +137,7 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
         transaction.commit();
 
     }
+
+
+
 } // End of class MainActivity

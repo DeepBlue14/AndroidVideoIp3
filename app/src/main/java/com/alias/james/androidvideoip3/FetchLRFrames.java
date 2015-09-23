@@ -37,14 +37,25 @@ import org.opencv.core.Mat;
 
 public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap this in a outer class!!!
 {
-    private Socket socket; /** To connect to robot */
+    private Socket leftCamSocket; /** To connect to robot's left camera server. */
+    private Socket rightCamSocket; /** To connect to robot's right camera server. */
     private String ipAddressStr = "10.0.4.6"; /** IP address of robot host.  Currently hard-coded to robot-lab6 (James Kuczynski's computer). */
-    private int port = 50000; /** Is the port used for this connection. */
+    private int leftCamPort = 50000; /** Is the port used by the left camera. */
+    private int rightCamPort = 50002; /** Is the port used by the right camera. */
     private final int MATRIX_SIZE = 921600; /** Is the size of the OpenCV matrix sent. */
     private Bitmap lFrame; /** Is a bitmap created from the OpenCV matrix passed from the robot's left camera */
     private Bitmap rFrame; /** Is a bitmap created from the OpenCV matrix passed from the robot's right camera */
-    private Activity activity; /** is a reference to the MainActivity's Acitivy object */
-    private CameraOptions cameraOptions; /** Is a reference to the fragment which allows the user to choose the left or right camera */
+    private Activity activity; /** is a reference to the MainActivity's Activity object */
+    private static CameraOptions cameraOptions; /** Is a reference to the fragment which allows the user to choose the left or right camera */
+    private InetAddress serverAddress = null; /** Internet address of robot. */
+
+    enum CameraLoc /** Type used to specify which camera should be used. */
+    {
+        LEFT,
+        RIGHT
+    }
+    private CameraLoc cameraLoc = CameraLoc.LEFT; /** Variable used to specify which camera should be used. */
+
 
 
     /**
@@ -53,7 +64,7 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
      * @param resources
      * @param activity
      */
-    public FetchLRFrames(Resources resources, Activity activity) //Resources from Activity
+    public FetchLRFrames(Resources resources, Activity activity, CameraLoc cameraLoc) //Resources from Activity
     {
         System.out.println("^^^Starting FetchLRFrames...^^^");
         this.activity = activity;
@@ -63,13 +74,52 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
             System.err.println("^^^Failed to load OpenCV @ FetchLRFrames::FetchLRFrames()");
         }
 
-        lFrame = BitmapFactory.decodeResource(resources, R.drawable.camera_off);
-        rFrame = BitmapFactory.decodeResource(resources, R.drawable.camera_off);
+        if(cameraLoc == CameraLoc.LEFT) {
+            lFrame = BitmapFactory.decodeResource(resources, R.drawable.camera_off);
+        }
+        else {
+            rFrame = BitmapFactory.decodeResource(resources, R.drawable.camera_off); //!!! other thread? !!!
+        }
 
         cameraOptions = new CameraOptions();
-        cameraOptions.setLeftBitmap(getlFrame());
-        cameraOptions.setRightBitmap(getRFrame());
+        if(cameraLoc == CameraLoc.LEFT)
+        {
+            cameraOptions.setLeftBitmap(getlFrame());
+        }
+        else
+        {
+            cameraOptions.setRightBitmap(getRFrame());
+        }
+
         cameraOptions.setArguments(activity.getIntent().getExtras());
+    }
+
+
+    /**
+     * Connects a socket to the appropriate server.
+     */
+    public void connect()
+    {
+
+        try {
+            serverAddress = InetAddress.getByName(ipAddressStr);
+            if(cameraLoc == CameraLoc.LEFT)
+            {
+                leftCamSocket = new Socket(serverAddress, leftCamPort);
+                System.out.println("^^^Successfully connected left camera socket to server^^^");
+            }
+            else
+            {
+                rightCamSocket = new Socket(serverAddress, leftCamPort);
+                System.out.println("^^^Successfully connected right camera socket to server^^^");
+            }
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -87,43 +137,57 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
     {
         try
         {
-            /*
-            * !!! Do this connecting stuff in a separate function (like DataCom does)
-            * so that it can be called multiple times without trying to re-connect
-            * (which breaks it).
-            */
-            InetAddress serverAddress = InetAddress.getByName(ipAddressStr);
-            socket = new Socket(serverAddress, port);
-            System.out.println("^^^Successfully connected to server^^^");
-
-
-            InputStream sub = socket.getInputStream();
-            System.out.println("^^^Generating new InputStream obj");
-            // !!!???will this be true 32 & 64 bit processors???!!!
-            byte[] buffer = new byte[MATRIX_SIZE];
-            int currPos = 0;
-            int bytesRead = 0;
-
-            do
+            if(serverAddress == null)
             {
-                bytesRead = sub.read(buffer, currPos, (buffer.length - currPos) );
+                connect();
+            }
 
-                if(bytesRead != -1 && bytesRead != 0)
-                {
-                    currPos += bytesRead;
+            InputStream sub;
+            if(cameraLoc == CameraLoc.LEFT && leftCamSocket != null)
+            {
+                sub = leftCamSocket.getInputStream();
+            }
+            else if(cameraLoc == CameraLoc.RIGHT && rightCamSocket != null)
+            {
+                sub = rightCamSocket.getInputStream();
+            }
+            else
+            {
+                sub = null;
+            }
+
+            if(sub != null) {
+
+                System.out.println("^^^Generating new InputStream obj");
+                // !!!???will this be true 32 & 64 bit processors???!!!
+                byte[] buffer = new byte[MATRIX_SIZE];
+                int currPos = 0;
+                int bytesRead = 0;
+
+                do {
+                    bytesRead = sub.read(buffer, currPos, (buffer.length - currPos));
+
+                    if (bytesRead != -1 && bytesRead != 0) {
+                        currPos += bytesRead;
+                    } else {
+                        break;
+                    }
+
+                } while (bytesRead != -1 && bytesRead != 0);
+
+                System.out.println("^^^received image bytes:" + currPos);
+                Mat mat = new Mat(480, 640, CvType.CV_8UC3);
+                mat.put(0, 0, buffer);
+
+                if (cameraLoc == CameraLoc.LEFT) {
+                    lFrame = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
+                    Utils.matToBitmap(mat, lFrame);
+                } else {
+                    rFrame = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
+                    Utils.matToBitmap(mat, rFrame);
                 }
-                else
-                {
-                    break;
-                }
+            }
 
-            }while(bytesRead != -1 && bytesRead != 0);
-
-            System.out.println("^^^recieved image bytes:" + currPos);
-            Mat mat = new Mat(480, 640, CvType.CV_8UC3);
-            mat.put(0, 0, buffer);
-            lFrame = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
-            Utils.matToBitmap(mat, lFrame);
         }
         catch (UnknownHostException e)
         {
@@ -136,8 +200,16 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
             e.printStackTrace();
         }
 
-        cameraOptions.setLeftBitmap(getlFrame());
-        cameraOptions.setRightBitmap(getRFrame());
+        if(cameraLoc == CameraLoc.LEFT)
+        {
+            cameraOptions.setLeftBitmap(getlFrame());
+        }
+        else
+        {
+            cameraOptions.setRightBitmap(getRFrame());
+        }
+
+
 
         return null;
     }
@@ -152,31 +224,87 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
     protected void onPostExecute(Long aLong)
     {
         super.onPostExecute(aLong);
-        cameraOptions.updateButtons(getlFrame(), getRFrame());
+        //cameraOptions.updateButtons(getlFrame(), getRFrame()); //!!! each AsyncTask should update it own button (exclusively) !!!
+        if(cameraLoc == CameraLoc.LEFT)
+        {
+            cameraOptions.updateLeftButton(getlFrame());
+        }
+        else
+        {
+            cameraOptions.updateRightButton(getRFrame());
+        }
     }
 
 
     /**
      * Mutator.
-     * @see #port
+     * @see #cameraLoc
      *
-     * @param port
+     * @param cameraLoc
      */
-    public void setPort(int port)
+    public void setCameraLoc(CameraLoc cameraLoc)
     {
-        this.port = port;
+        this.cameraLoc = cameraLoc;
     }
 
 
     /**
      * Accessor.
-     * @see #port
+     * @see #cameraLoc
      *
      * @return
      */
-    public int getPort()
+    public CameraLoc getCameraLoc()
     {
-        return port;
+        return cameraLoc;
+    }
+
+
+    /**
+     * Mutator.
+     * @see #leftCamPort
+     *
+     * @param leftCamPort
+     */
+    public void setLeftCamPort(int leftCamPort)
+    {
+        this.leftCamPort = leftCamPort;
+    }
+
+
+    /**
+     * Accessor.
+     * @see #leftCamPort
+     *
+     * @return
+     */
+    public int getLeftCamPort()
+    {
+        return leftCamPort;
+    }
+
+
+    /**
+     * Mutator.
+     * @see #rightCamPort
+     *
+     * @param rightCamPort
+     */
+    public void setRightCamPort(int rightCamPort)
+    {
+        this.rightCamPort = rightCamPort;
+    }
+
+
+    /**
+     * Accessor.
+     * @see #rightCamPort
+     *
+     * @return
+     */
+    public int getRightCamPort()
+    {
+        return rightCamPort;
     }
 
 
@@ -301,12 +429,25 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
 
 
     /**
-     * Closes the socket.
+     * Closes leftCamSocket.
      */
-    public void close()
+    public void closeLeftCamSocket()
     {
         try {
-            socket.close();
+            leftCamSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * Closes rightCamSocket
+     */
+    public void closeRightCamSocket()
+    {
+        try {
+            rightCamSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

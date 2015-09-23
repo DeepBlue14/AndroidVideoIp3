@@ -108,13 +108,51 @@ public class CameraOptions extends Fragment
         if(leftBitmap != null)
         {
             leftImgBtn.setImageBitmap(leftBitmap);
+            leftImgBtn.setEnabled(true);
+        }
+        else
+        {
+            leftImgBtn.setEnabled(false);
+        }
+
+        if(rightBitmap != null)
+        {
+            rightImgBtn.setImageBitmap(rightBitmap);
+            rightImgBtn.setEnabled(true);
+        }
+        else
+        {
+            rightImgBtn.setEnabled(false);
+        }
+    }
+
+
+    /**
+     *
+     * @param leftBitmap
+     */
+    public void updateLeftButton(Bitmap leftBitmap) {
+        setLeftBitmap(leftBitmap);
+
+        if(leftBitmap != null)
+        {
+            leftImgBtn.setImageBitmap(leftBitmap);
             leftImgBtn.setClickable(true);
         }
         else
         {
             leftImgBtn.setClickable(false);
         }
+    }
 
+
+    /**
+     *
+     *
+     * @param rightBitmap
+     */
+    public void updateRightButton(Bitmap rightBitmap)
+    {
         if(rightBitmap != null)
         {
             rightImgBtn.setImageBitmap(rightBitmap);
