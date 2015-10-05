@@ -5,6 +5,7 @@
  * File Description: This class displays the data stream from a camera, and acts as the base UI
  *                   during most of the execution.
  *
+ * See: http://stackoverflow.com/questions/5125851/enable-disable-zoom-in-android-webview
  * Reference:
  *
  * Created July 17, 2015 at 8:00pm
@@ -42,7 +43,8 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     private String topic = "/camera/rgb/image_rect_color";
     private int portInt = 8080; /** Default port for the robot's video stream to use. */
     //private String camUrlStr = "http:10.0.2.2:8080/stream_viewer?topic=/camera/rgb/image_rect_color";
-    private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color"; /** Default URL that of the robot's video feed. */
+    private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_raw"; /** Default URL that of the robot's video feed. */
+    //private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color";
     LayoutInflater inflater; /** Is an inflater object to inflate the VerifyTouch dialog UI. */
     DataCom dataCom; /** Is used to handle transactions between the robot and Android device after an point has been initially selected. */
 

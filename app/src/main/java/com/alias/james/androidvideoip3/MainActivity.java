@@ -128,6 +128,7 @@ public class MainActivity extends FragmentActivity implements OnCameraSelectedLi
     {
         System.out.println("swapping");
         VideoFrag secondFrag = new VideoFrag();
+
         secondFrag.setArguments(getIntent().getExtras());
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

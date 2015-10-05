@@ -3,7 +3,9 @@
  * Author: James Kuczynski
  * Email: jkuczyns@cs.uml.edu
  * File Description: This class handles the options page, which allows the user to choose the
- *                   left or right camera.
+ *                   left or right camera.  If a camera is unavailable, the a image of a camera
+ *                   with the international "unavailable" signal over it, and will not respond to
+ *                   user clicks.
  *
  * References:
  *
@@ -27,8 +29,8 @@ public class CameraOptions extends Fragment
 {
     private String[] cameraArr = {"Left Camera", "Right Camera"};/** Array of cameras. */
     private OnCameraSelectedListener cameraCallback; /** Callback object to handle events. */
-    private Bitmap leftBitmap; /** Bitmap contained within left ImageButton. */
-    private Bitmap rightBitmap; /** Bitmap contained within right ImageButton. */
+    private Bitmap leftBitmap = null; /** Bitmap contained within left ImageButton. */
+    private Bitmap rightBitmap = null; /** Bitmap contained within right ImageButton. */
     private ImageButton leftImgBtn; /** The left ImageButton. */
     private ImageButton rightImgBtn; /** The right ImageButton. */
 
@@ -58,8 +60,11 @@ public class CameraOptions extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.camera_options, container, false);
+
         leftImgBtn = (ImageButton) view.findViewById(R.id.left_camera);
         rightImgBtn = (ImageButton) view.findViewById(R.id.right_camera);
+        leftImgBtn.setEnabled(false);
+        rightImgBtn.setEnabled(false);
 
         updateButtons(leftBitmap, rightBitmap);
 
@@ -107,22 +112,26 @@ public class CameraOptions extends Fragment
 
         if(leftBitmap != null)
         {
+            System.out.println("^^^Turned on left bitmap @ CameraOptions::updateButtons(...)");
             leftImgBtn.setImageBitmap(leftBitmap);
-            leftImgBtn.setEnabled(true);
+            //leftImgBtn.setEnabled(true);
         }
         else
         {
-            leftImgBtn.setEnabled(false);
+            System.out.println("^^^Shut off left bitmap @ CameraOptions::updateButtons(...)");
+            //leftImgBtn.setEnabled(false);
         }
 
         if(rightBitmap != null)
         {
+            System.out.println("^^^Turned on right bitmap @ CameraOptions::updateButtons(...)");
             rightImgBtn.setImageBitmap(rightBitmap);
-            rightImgBtn.setEnabled(true);
+            //rightImgBtn.setEnabled(true);
         }
         else
         {
-            rightImgBtn.setEnabled(false);
+            System.out.println("^^^Shut off right bitmap @ CameraOptions::updateButtons(...)");
+            //rightImgBtn.setEnabled(false);
         }
     }
 
@@ -131,17 +140,18 @@ public class CameraOptions extends Fragment
      *
      * @param leftBitmap
      */
-    public void updateLeftButton(Bitmap leftBitmap) {
+    public void updateLeftButton(Bitmap leftBitmap, boolean isLFrameReal) {
         setLeftBitmap(leftBitmap);
 
-        if(leftBitmap != null)
-        {
+        if(isLFrameReal == true)
+        {System.out.println("^^^Turned on left bitmap @ CameraOptions::updateLeftButton(...)");
             leftImgBtn.setImageBitmap(leftBitmap);
-            leftImgBtn.setClickable(true);
+            leftImgBtn.setEnabled(true);
         }
         else
         {
-            leftImgBtn.setClickable(false);
+            System.out.println("^^^Turned off left bitmap @ CameraOptions::updateLeftButton(...)");
+            leftImgBtn.setEnabled(false);
         }
     }
 
@@ -151,16 +161,19 @@ public class CameraOptions extends Fragment
      *
      * @param rightBitmap
      */
-    public void updateRightButton(Bitmap rightBitmap)
-    {
-        if(rightBitmap != null)
+    public void updateRightButton(Bitmap rightBitmap, boolean isRFrameReal) {
+        setRightBitmap(rightBitmap);
+
+        if(isRFrameReal == true)
         {
+            System.out.println("^^^Turned on right bitmap @ CameraOptions::updateRightButton(...)");
             rightImgBtn.setImageBitmap(rightBitmap);
-            rightImgBtn.setClickable(true);
+            rightImgBtn.setEnabled(true);
         }
         else
         {
-            rightImgBtn.setClickable(false);
+            System.out.println("^^^Turned off right bitmap @ CameraOptions::updateRightButton(...)");
+            rightImgBtn.setEnabled(false);
         }
     }
 
@@ -229,8 +242,7 @@ public class CameraOptions extends Fragment
      *
      * @param cameraCallback
      */
-    public void setCameraCallback(OnCameraSelectedListener cameraCallback)
-    {
+    public void setCameraCallback(OnCameraSelectedListener cameraCallback) {
         this.cameraCallback = cameraCallback;
     }
 
@@ -297,30 +309,6 @@ public class CameraOptions extends Fragment
 
     /**
      * Mutator.
-     * @see #rightImgBtn
-     *
-     * @param rightImgBtn
-     */
-    public void setRightImgBtn(ImageButton rightImgBtn)
-    {
-        this.rightImgBtn = rightImgBtn;
-    }
-
-
-    /**
-     * Mutator.
-     * @see #rightImgBtn
-     *
-     * @return rightImgBtn
-     */
-    public ImageButton getRightImgBtn()
-    {
-        return rightImgBtn;
-    }
-
-
-    /**
-     * Mutator.
      * @see #leftImgBtn
      *
      * @param leftImgBtn
@@ -340,6 +328,30 @@ public class CameraOptions extends Fragment
     public ImageButton getLeftImgBtn()
     {
         return leftImgBtn;
+    }
+
+
+    /**
+     * Mutator.
+     * @see #rightImgBtn
+     *
+     * @param rightImgBtn
+     */
+    public void setRightImgBtn(ImageButton rightImgBtn)
+    {
+        this.rightImgBtn = rightImgBtn;
+    }
+
+
+    /**
+     * Mutator.
+     * @see #rightImgBtn
+     *
+     * @return rightImgBtn
+     */
+    public ImageButton getRightImgBtn()
+    {
+        return rightImgBtn;
     }
 
 

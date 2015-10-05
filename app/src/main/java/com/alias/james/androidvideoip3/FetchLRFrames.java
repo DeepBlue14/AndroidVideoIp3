@@ -45,6 +45,8 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
     private final int MATRIX_SIZE = 921600; /** Is the size of the OpenCV matrix sent. */
     private Bitmap lFrame; /** Is a bitmap created from the OpenCV matrix passed from the robot's left camera */
     private Bitmap rFrame; /** Is a bitmap created from the OpenCV matrix passed from the robot's right camera */
+    private boolean isLFrameReal = false;
+    private boolean isRFrameReal = false;
     private Activity activity; /** is a reference to the MainActivity's Activity object */
     private static CameraOptions cameraOptions; /** Is a reference to the fragment which allows the user to choose the left or right camera */
     private InetAddress serverAddress = null; /** Internet address of robot. */
@@ -68,6 +70,7 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
     {
         System.out.println("^^^Starting FetchLRFrames...^^^");
         this.activity = activity;
+        this.cameraLoc = cameraLoc;
 
         if(!OpenCVLoader.initDebug() )
         {
@@ -77,17 +80,24 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
         if(cameraLoc == CameraLoc.LEFT) {
             lFrame = BitmapFactory.decodeResource(resources, R.drawable.camera_off);
         }
-        else {
+        else if(cameraLoc == CameraLoc.RIGHT) {
             rFrame = BitmapFactory.decodeResource(resources, R.drawable.camera_off); //!!! other thread? !!!
         }
 
-        cameraOptions = new CameraOptions();
         if(cameraLoc == CameraLoc.LEFT)
         {
+            System.out.println("^^^Generating new cameraOptions");
+            cameraOptions = new CameraOptions();
+        }
+
+        if(cameraLoc == CameraLoc.LEFT)
+        {
+            System.out.println("^^^setting leftbitmap @ FetchLRFrames::doInBackground(...)");
             cameraOptions.setLeftBitmap(getlFrame());
         }
-        else
+        else if(cameraLoc == CameraLoc.RIGHT)
         {
+            System.out.println("^^^setting rightbitmap @ FetchLRFrames::doInBackground(...)");
             cameraOptions.setRightBitmap(getRFrame());
         }
 
@@ -100,23 +110,25 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
      */
     public void connect()
     {
-
+        System.out.println("^^^@ connect()");
         try {
             serverAddress = InetAddress.getByName(ipAddressStr);
-            if(cameraLoc == CameraLoc.LEFT)
-            {
+            if(cameraLoc == CameraLoc.LEFT) {
                 leftCamSocket = new Socket(serverAddress, leftCamPort);
-                System.out.println("^^^Successfully connected left camera socket to server^^^");
             }
-            else
-            {
+            else {
                 rightCamSocket = new Socket(serverAddress, leftCamPort);
-                System.out.println("^^^Successfully connected right camera socket to server^^^");
             }
 
         } catch (UnknownHostException e) {
+            System.out.println("^^^Ousted");
             e.printStackTrace();
         } catch (IOException e) {
+            System.out.println("^^^Ousted");
+            e.printStackTrace();
+        }catch (Exception e)
+        {
+            System.out.println("^^^Ousted");
             e.printStackTrace();
         }
 
@@ -173,19 +185,26 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
                         break;
                     }
 
-                } while (bytesRead != -1 && bytesRead != 0);
+                } while (true);
 
                 System.out.println("^^^received image bytes:" + currPos);
                 Mat mat = new Mat(480, 640, CvType.CV_8UC3);
                 mat.put(0, 0, buffer);
 
-                if (cameraLoc == CameraLoc.LEFT) {
+                if (cameraLoc == CameraLoc.LEFT && currPos == 921600) {
                     lFrame = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
                     Utils.matToBitmap(mat, lFrame);
-                } else {
+                    System.out.println("^^^Here comes Fred's (left) students!");
+                    isLFrameReal = true;
+                } else if (cameraLoc == CameraLoc.RIGHT && currPos == 921600){
                     rFrame = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
                     Utils.matToBitmap(mat, rFrame);
+                    System.out.println("^^^Here comes Fred's (right) students!");
+                    isRFrameReal = true;
                 }
+
+
+
             }
 
         }
@@ -198,14 +217,20 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
         {
             System.out.println("^^^Ousted");
             e.printStackTrace();
+        }catch (Exception e)
+        {
+            System.out.println("^^^Ousted");
+            e.printStackTrace();
         }
 
         if(cameraLoc == CameraLoc.LEFT)
         {
+            System.out.println("^^^setting leftbitmap @ FetchLRFrames::doInBackground(...)");
             cameraOptions.setLeftBitmap(getlFrame());
         }
-        else
+        else if(cameraLoc == CameraLoc.RIGHT)
         {
+            System.out.println("^^^setting rightbitmap @ FetchLRFrames::doInBackground(...)");
             cameraOptions.setRightBitmap(getRFrame());
         }
 
@@ -224,14 +249,16 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
     protected void onPostExecute(Long aLong)
     {
         super.onPostExecute(aLong);
+        System.out.println("^^^@ onPostExecute(...)");
         //cameraOptions.updateButtons(getlFrame(), getRFrame()); //!!! each AsyncTask should update it own button (exclusively) !!!
         if(cameraLoc == CameraLoc.LEFT)
         {
-            cameraOptions.updateLeftButton(getlFrame());
+            cameraOptions.updateLeftButton(getlFrame(), isLFrameReal);
         }
-        else
+        else if(cameraLoc == CameraLoc.RIGHT)
         {
-            cameraOptions.updateRightButton(getRFrame());
+            System.out.println("^^^I am the right button status: " + isRFrameReal);
+            cameraOptions.updateRightButton(getRFrame(), isRFrameReal);
         }
     }
 
