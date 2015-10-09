@@ -21,12 +21,18 @@ public class UniversalDat
         RIGHT
     }
 
-    private static String ipAddressStr = "10.0.4.6"; /** IP address of the robot (currently hard-coded to James's lab machine). */
-    private static String leftCamTopicStr = "/camera1/rgb/image_rect_color"; /** ROS topic the left camera will publish to. */
-    private static String rightCamTopicStr = "/camera2/rgb/image_rect_color"; /** ROS topic the right camera will publish to. */
-    private static String camUrlStr = "http:"+ ipAddressStr + ":8080/stream_viewer?topic=" + leftCamTopicStr; /** URL of the camera selected. */
+    /**
+     * IP address of the robot (initialized to James' lab machine--internal network.
+     * Alternate: 129.63.17.97 (James' lab machine--external network)
+     */
+    private static String ipAddressStr = "10.0.4.6";
+    private static String leftCamTopicStr = "/camera/rgb/image_raw"; /** !!!TEMP!!! ROS topic the left camera will publish to. */
+    //private static String leftCamTopicStr = "/camera1/rgb/image_raw"; /** ROS topic the left camera will publish to. */
+    private static String rightCamTopicStr = "/camera2/rgb/image_raw"; /** ROS topic the right camera will publish to. */
+    private static int videoPort = 8080; /** The port which the video stream (VideoFrag.java) will use. */
+    private static String camUrlStr = "http:"+ ipAddressStr + ":"+ videoPort +"/stream_viewer?topic=" + leftCamTopicStr; /** URL of the camera selected. */
     private static int leftCamPort = 50000; /** The port the left camera will use at class FetchLRFrames. */
-    private static int rightCamPort = 52000; /** The port the right camera will use at class FetchLRFrames. */
+    private static int rightCamPort = 50002; /** The port the right camera will use at class FetchLRFrames. */
     private static int datacomPort = 50001; /** The port which class DataCom will use. */
 
 
@@ -224,6 +230,30 @@ public class UniversalDat
 
 
     /**
+     * Mutator.
+     * @see #videoPort
+     *
+     * @param videoPort
+     */
+    public static void setVideoPort(int videoPort)
+    {
+        UniversalDat.videoPort = videoPort;
+    }
+
+
+    /**
+     * Accessor.
+     * @see #videoPort
+     *
+     * @return
+     */
+    public static int getVideoPort()
+    {
+        return videoPort;
+    }
+
+
+    /**
      * Prints out the current values of the class member variables.
      *
      * @return
@@ -238,6 +268,7 @@ public class UniversalDat
                      "leftCamPort: " + leftCamPort + "\n" +
                      "rightCamPort: " + rightCamPort + "\n" +
                      "datacomPort: " + datacomPort +
+                     "videoPort: " + videoPort +
                      "-------------------------------------------------------";
         return tmp;
     }

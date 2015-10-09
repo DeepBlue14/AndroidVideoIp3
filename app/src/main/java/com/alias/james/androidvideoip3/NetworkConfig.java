@@ -32,11 +32,13 @@ import android.widget.EditText;
 
 public class NetworkConfig
 {
-    private String ipAddressStr = "10.0.4.6"; /** Is the IP address of the robot.  Currently hard-coded to James K's lab machine robot-lab6. */
-    private int portInt = 8080; /** Is the port that the video stream will be sent to. */
-    private String leftCamTopic = "/usb_cam1/image_raw"; /** Is the ROS topic that the left camera will stream to. */
-    private String rightCamTopic = "/usb_cam2/image_raw"; /** Is the ROS topic that the right camera will stream to. */
-    private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color"; /** Is the HTTP address the robot will stream video to. */
+    //private String ipAddressStr = "10.0.4.6"; /** Is the IP address of the robot.  Currently hard-coded to James K's lab machine robot-lab6. */
+    //private String ipAddressStr = "129.63.17.97";
+    //private int portInt = 8080; /** Is the port that the video stream will be sent to. */
+    //private String leftCamTopic = "/usb_cam1/image_raw"; /** Is the ROS topic that the left camera will stream to. */
+    //private String rightCamTopic = "/usb_cam2/image_raw"; /** Is the ROS topic that the right camera will stream to. */
+    //private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color"; /** Is the HTTP address the robot will stream video to. */
+    //private String camUrlStr = "http:129.63.17.97:8080/stream_viewer?topic=/camera/rgb/image_rect_color";
     private AlertDialog.Builder networkDialog; /** Is the dialog which will present networking options (if the user is logged in as administrator. */
 
 
@@ -59,14 +61,31 @@ public class NetworkConfig
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        EditText userName = (EditText) view.findViewById(R.id.ip_address);
-                        EditText password = (EditText) view.findViewById(R.id.port);
+                        EditText ipAddressUi = (EditText) view.findViewById(R.id.ip_address);
+                        EditText port1Ui = (EditText) view.findViewById(R.id.port_1);
+                        EditText rosTopicLeftUi = (EditText) view.findViewById(R.id.ros_topic_left);
+                        EditText rosTopicRightUi = (EditText) view.findViewById(R.id.ros_topic_right);
 
-                        if (!userName.getText().toString().isEmpty() && !password.getText().toString().isEmpty() ) {
-                            ipAddressStr = userName.getText().toString();
-                            portInt = Integer.parseInt(password.getText().toString());
+                        //if (!userName.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
+                        if (Login.getUserIsAdmin()) {
+                            System.out.println("^^^Admin; read new data");
+                            if (!ipAddressUi.getText().toString().isEmpty()) {
+                                UniversalDat.setIpAddressStr(ipAddressUi.getText().toString());
+                            }
+                            if (!port1Ui.getText().toString().isEmpty()) {
+                                UniversalDat.setDatacomPort(Integer.parseInt(port1Ui.getText().toString()));
+                            }
+                            if (!rosTopicLeftUi.getText().toString().isEmpty()) {
+                                UniversalDat.setLeftCamTopicStr(rosTopicLeftUi.getText().toString() );
+                            }
+                            if (!rosTopicLeftUi.getText().toString().isEmpty()) {
+                                UniversalDat.setRightCamTopicStr(rosTopicRightUi.getText().toString() );
+                            }
+
+                        } else {
+                            System.out.println("^^^NOT admin; reject data");
                         }
-                        setUrl(ipAddressStr, portInt);
+                        //setUrl(ipAddressStr, portInt);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -79,124 +98,6 @@ public class NetworkConfig
                 .setIcon(android.R.drawable.ic_dialog_alert);
     }
 
-
-    /**
-     * Mutator.
-     * @see #ipAddressStr
-     *
-     * @param ipAddressStr
-     */
-    public void setIpAddressStr(String ipAddressStr)
-    {
-        this.ipAddressStr = ipAddressStr;
-    }
-
-
-    /**
-     * Accessor.
-     * @see #ipAddressStr
-     *
-     * @return
-     */
-    public String getIpAddressStr()
-    {
-        return ipAddressStr;
-    }
-
-
-    /**
-     * Mutator.
-     * @see #portInt
-     *
-     * @param portInt
-     */
-    public void setPortInt(int portInt)
-    {
-        this.portInt = portInt;
-    }
-
-
-    /**
-     * Accessor.
-     * @see #portInt
-     *
-     * @return
-     */
-    public int getPortInt()
-    {
-        return portInt;
-    }
-
-
-    /**
-     * Mutator.
-     * @see #leftCamTopic
-     *
-     * @param leftCamTopic
-     */
-    public void setLeftCamTopic(String leftCamTopic)
-    {
-        this.leftCamTopic = leftCamTopic;
-    }
-
-
-    /**
-     * Accessor.
-     * @see #leftCamTopic
-     *
-     * @return
-     */
-    public String getLeftCamTopic()
-    {
-        return leftCamTopic;
-    }
-
-
-    /**
-     * Mutator.
-     * @see #rightCamTopic
-     *
-     * @param rightCamTopic
-     */
-    public void setRightCamTopic(String rightCamTopic)
-    {
-        this.rightCamTopic = rightCamTopic;
-    }
-
-
-    /**
-     * Accessor.
-     * @see #rightCamTopic
-     *
-     * @return
-     */
-    public String getRightCamTopic()
-    {
-        return rightCamTopic;
-    }
-
-
-    /**
-     * Mutator.
-     * @see #camUrlStr
-     *
-     * @param camUrlStr
-     */
-    public void setCamUrlStr(String camUrlStr)
-    {
-        this.camUrlStr = camUrlStr;
-    }
-
-    /**
-     * Accessor.
-     * @see #camUrlStr
-     *
-     * @return
-     */
-    public String getCamUrlStr()
-    {
-        return camUrlStr;
-    }
 
     /**
      * Mutator.
@@ -219,20 +120,6 @@ public class NetworkConfig
     public AlertDialog.Builder getNetworkDialog()
     {
         return networkDialog;
-    }
-
-
-    /**
-     * Concatinate the ipaddress and port in order to set up the http address.
-     * @see #ipAddressStr
-     * @see #portInt
-     *
-     * @param ipAddressStr
-     * @param portInt
-     */
-    private void setUrl(String ipAddressStr, int portInt)
-    {
-        camUrlStr =  "http:" + ipAddressStr + ":" + portInt + "/stream_viewer?topic=/camera/rgb/image_rect_color";
     }
 
 

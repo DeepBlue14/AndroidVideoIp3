@@ -41,8 +41,9 @@ public class DataCom
     private Socket socket; /** Socket object to handle traffic between robot and Android device. */
     private String m_msg; /** Contains the (x, y) coordinates to be sent to the robot for evaluation as a string sequence: "|x|y|". */
     private String yOrNMsg; /** Message sent to the robot to confirm or deny that the object with the box drawn around it was the correct one (will be Y or N). */
-    private static final int SERVER_PORT = 50001; /** Is the port that DataCom will use by default. */
-    private String ipAddressStr = "10.0.4.6"; /** IP Address of robot.  Currently hard-coded to James's lab machine (robot-lab6) */
+    //private static final int SERVER_PORT = 50001; /** Is the port that DataCom will use by default. */
+    //private String ipAddressStr = "10.0.4.6"; /** IP Address of robot.  Currently hard-coded to James's lab machine (robot-lab6) */
+    //private String ipAddressStr = "129.63.17.97"; /** IP Address of robot.  Currently hard-coded to James's lab machine (robot-lab6) */
     private final int MATRIX_SIZE = 921600; /** OpenCV matrixes  retrieved from the PrimeSense via ROS are always this size */
     private static Bitmap bBoxBitmap; /** Is the bitmap with bounding box drawn around the object the robot thinks the user selected. */
     private Activity activity; /** A reference to the UI's Activity object (to be used to inflate an alert dialog. */
@@ -226,8 +227,8 @@ public class DataCom
             System.out.println("^^^@ connect()");
 
             try {
-                serverAddress = InetAddress.getByName(ipAddressStr);
-                socket = new Socket(serverAddress, SERVER_PORT); //!!!connect in a separate method--same goes for FetchLRFrames!!!
+                serverAddress = InetAddress.getByName(UniversalDat.getIpAddressStr() );
+                socket = new Socket(serverAddress, UniversalDat.getDatacomPort() ); //!!!connect in a separate method--same goes for FetchLRFrames!!!
                 System.out.println("^^^Successfully connected to server^^^");
             } catch (UnknownHostException e) {
                 e.printStackTrace();

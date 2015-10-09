@@ -37,10 +37,18 @@ This package provides a UI to control a robot (specifically, [Rethink Baxter][6]
 
 ###**Install**
 
+download https://github.com/WPI-RAIL/async_web_server_cpp
+and https://github.com/RobotWebTools/web_video_server, and run ```catkin_make``` on them
+To reduce the TCP buffer size:
+async_web_server -> http_connetction.cpp --> HttpConnection::write(.....) --> pending_write_buffers and pending_write_ressources
+(see https://github.com/RobotWebTools/web_video_server/issues/13)
+
 To execute the individual nodes, run:
 ```
 roslaunch openni2_launch openni2_launch                 # start sensor
-rosrun web_video_server web_video_server                # send image stream over http
+rosrun web_video_server web_video_server                # send image stream over http; make sure you are running
+                                                        # the version you compiled from source, NOT the version
+                                                        # which comes default with ROS indigo
 rosrun ros_ip_transform RosServer __name:=left_cam      # send a frame from the left camera
 rosrun ros_ip_transform RosServer __name:=right_cam     # send a frame from the right camera
 rosrun ros_ip_transform DataCom                         # recieve point, send bounding-box image

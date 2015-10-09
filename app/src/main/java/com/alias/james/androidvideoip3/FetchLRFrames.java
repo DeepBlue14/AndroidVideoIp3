@@ -39,9 +39,10 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
 {
     private Socket leftCamSocket; /** To connect to robot's left camera server. */
     private Socket rightCamSocket; /** To connect to robot's right camera server. */
-    private String ipAddressStr = "10.0.4.6"; /** IP address of robot host.  Currently hard-coded to robot-lab6 (James Kuczynski's computer). */
-    private int leftCamPort = 50000; /** Is the port used by the left camera. */
-    private int rightCamPort = 50002; /** Is the port used by the right camera. */
+    //private String ipAddressStr = "10.0.4.6"; /** IP address of robot host.  Currently hard-coded to robot-lab6 (James Kuczynski's computer). */
+    //private String ipAddressStr = "129.63.17.97"; /** IP address of robot host.  Currently hard-coded to robot-lab6 (James Kuczynski's computer). */
+    //private int leftCamPort = 50000; /** Is the port used by the left camera. */
+    //private int rightCamPort = 50002; /** Is the port used by the right camera. */
     private final int MATRIX_SIZE = 921600; /** Is the size of the OpenCV matrix sent. */
     private Bitmap lFrame; /** Is a bitmap created from the OpenCV matrix passed from the robot's left camera */
     private Bitmap rFrame; /** Is a bitmap created from the OpenCV matrix passed from the robot's right camera */
@@ -112,12 +113,12 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
     {
         System.out.println("^^^@ connect()");
         try {
-            serverAddress = InetAddress.getByName(ipAddressStr);
+            serverAddress = InetAddress.getByName(UniversalDat.getIpAddressStr() );
             if(cameraLoc == CameraLoc.LEFT) {
-                leftCamSocket = new Socket(serverAddress, leftCamPort);
+                leftCamSocket = new Socket(serverAddress, UniversalDat.getLeftCamPort() );
             }
             else {
-                rightCamSocket = new Socket(serverAddress, leftCamPort);
+                rightCamSocket = new Socket(serverAddress, UniversalDat.getLeftCamPort() );
             }
 
         } catch (UnknownHostException e) {
@@ -284,78 +285,6 @@ public class FetchLRFrames extends AsyncTask<Integer, Integer, Long> // !!!wrap 
     public CameraLoc getCameraLoc()
     {
         return cameraLoc;
-    }
-
-
-    /**
-     * Mutator.
-     * @see #leftCamPort
-     *
-     * @param leftCamPort
-     */
-    public void setLeftCamPort(int leftCamPort)
-    {
-        this.leftCamPort = leftCamPort;
-    }
-
-
-    /**
-     * Accessor.
-     * @see #leftCamPort
-     *
-     * @return
-     */
-    public int getLeftCamPort()
-    {
-        return leftCamPort;
-    }
-
-
-    /**
-     * Mutator.
-     * @see #rightCamPort
-     *
-     * @param rightCamPort
-     */
-    public void setRightCamPort(int rightCamPort)
-    {
-        this.rightCamPort = rightCamPort;
-    }
-
-
-    /**
-     * Accessor.
-     * @see #rightCamPort
-     *
-     * @return
-     */
-    public int getRightCamPort()
-    {
-        return rightCamPort;
-    }
-
-
-    /**
-     * Mutator.
-     * @see #ipAddressStr
-     *
-     * @param ipAddressStr is the IP address of the robot
-     */
-    public void setIpAddressStr(String ipAddressStr)
-    {
-        this.ipAddressStr = ipAddressStr;
-    }
-
-
-    /**
-     * Accessor.
-     * @see #ipAddressStr
-     *
-     * @return
-     */
-    public String getIpAddressStr()
-    {
-        return ipAddressStr;
     }
 
 

@@ -14,10 +14,12 @@
     <string name="app_name">AndroidVideoIp3</string>
     <string name="action_settings">Settings</string>
     <string name="ip_address">IP Address</string>
-    <string name="port">Port</string>
+    <string name="port_1">Port 1</string>
+    <string name="port_2">Port 2</string>
+    <string name="port_3">Port 3</string>
     <string name="ros_topic_left">ROS Topic (left cam)</string>
     <string name="ros_topic_right">ROS Topic (right cam)</string>
-    <string name="update">Update</string>
+    <string name="update">Reload Video</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
 </resources>

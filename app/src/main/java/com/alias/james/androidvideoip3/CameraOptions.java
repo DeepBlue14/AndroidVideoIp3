@@ -114,6 +114,7 @@ public class CameraOptions extends Fragment
         {
             System.out.println("^^^Turned on left bitmap @ CameraOptions::updateButtons(...)");
             leftImgBtn.setImageBitmap(leftBitmap);
+            //leftImgBtn.setImageBitmap(Bitmap.createScaledBitmap(leftBitmap, 300, 240, false) );
             //leftImgBtn.setEnabled(true);
         }
         else
@@ -146,6 +147,7 @@ public class CameraOptions extends Fragment
         if(isLFrameReal == true)
         {System.out.println("^^^Turned on left bitmap @ CameraOptions::updateLeftButton(...)");
             leftImgBtn.setImageBitmap(leftBitmap);
+            //leftImgBtn.setImageBitmap(Bitmap.createScaledBitmap(leftBitmap, 300, 240, false) );
             leftImgBtn.setEnabled(true);
         }
         else

@@ -26,6 +26,7 @@ public class Login
 {
     private AlertDialog.Builder loginDialog; /** Is the dialog which allows the user to gain administrator privileges. */
     private MenuItem adminCb; /** Is the checkbox which is checked if the current user is logged in as administrator. */
+    private static boolean userIsAdmin = false;
 
 
     /**
@@ -52,8 +53,10 @@ public class Login
 
                         if (userNameStr.equals("h") && passwordStr.equals("r")) {
                             if (adminCb.isChecked() == true) {
+                                setUserIsAdmin(false);
                                 adminCb.setChecked(false); // log out
                             } else {
+                                setUserIsAdmin(true);
                                 adminCb.setChecked(true); // log in
                             }
                         }
@@ -81,6 +84,18 @@ public class Login
     {
         adminCb = checkbox;
         loginDialog.show();
+    }
+
+
+    public static void setUserIsAdmin(boolean userIsAdmin)
+    {
+        Login.userIsAdmin = userIsAdmin;
+    }
+
+
+    public static boolean getUserIsAdmin()
+    {
+        return userIsAdmin;
     }
 
 

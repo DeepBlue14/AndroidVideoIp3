@@ -39,12 +39,13 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     private float fingerPressY = 0; /** Is the y coordinate of the finger press action. */
     private float fingerReleaseX = 0; /** Is the x coordinate of the finger release action. */
     private float fingerReleaseY = 0; /** Is the y coordinate of the finger release action. */
-    private String ipAddressStr = "10.0.4.6"; /** IP address of the robot, currently hard-coded to James K's lab machine: robot-lab6 */
-    private String topic = "/camera/rgb/image_rect_color";
-    private int portInt = 8080; /** Default port for the robot's video stream to use. */
+    //private String ipAddressStr = "10.0.4.6"; /** IP address of the robot, currently hard-coded to James K's lab machine: robot-lab6 *
+    //private String ipAddressStr = "129.63.17.97";
+    //private String topic = "/camera/rgb/image_rect_color";
+    //private int portInt = 8080; /** Default port for the robot's video stream to use. */
     //private String camUrlStr = "http:10.0.2.2:8080/stream_viewer?topic=/camera/rgb/image_rect_color";
-    private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_raw"; /** Default URL that of the robot's video feed. */
-    //private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_rect_color";
+    //private String camUrlStr = "http:10.0.4.6:8080/stream_viewer?topic=/camera/rgb/image_raw"; /** Default URL that of the robot's video feed. */
+    //private String camUrlStr = "http:129.63.17.97:8080/stream_viewer?topic=/camera/rgb/image_rect_color";
     LayoutInflater inflater; /** Is an inflater object to inflate the VerifyTouch dialog UI. */
     DataCom dataCom; /** Is used to handle transactions between the robot and Android device after an point has been initially selected. */
 
@@ -200,7 +201,7 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
      */
     public void startWebCamStream()
     {
-        webView.loadUrl(camUrlStr);
+        webView.loadUrl(UniversalDat.getCamUrlStr());
     }
 
 
@@ -393,103 +394,6 @@ public class VideoFrag extends Fragment implements WebView.OnTouchListener, Text
     public float getFingerReleaseY()
     {
         return fingerReleaseY;
-    }
-
-
-    /**
-     * Mutator.
-     * @see #ipAddressStr
-     *
-     * @param ipAddressStr
-     */
-    public void setIpAddressStr(String ipAddressStr)
-    {
-        this.ipAddressStr = ipAddressStr;
-    }
-
-
-    /**
-     * Accessor.
-     * @see #ipAddressStr
-     *
-     * @return
-     */
-    public String getIpAddressStr()
-    {
-        return ipAddressStr;
-    }
-
-
-    /**
-     * Mutator.
-     * @see #topic
-     *
-     * @param topic
-     */
-    public void setTopic(String topic)
-    {
-        this.topic = topic;
-    }
-
-
-    /**
-     * Accessor.
-     * @see #topic
-     *
-     * @return
-     */
-    public String getTopic() {
-        return topic;
-    }
-
-
-    /**
-     * Mutator.
-     * @see #portInt
-     *
-     * @param portInt
-     */
-    public void setPortInt(int portInt)
-    {
-        this.portInt = portInt;
-    }
-
-
-    /**
-     * Accessor
-     * @see #portInt
-     *
-     * @return
-     */
-    public int getPortInt()
-    {
-        return portInt;
-    }
-
-
-    /**
-     * Mutator.
-     * @see #ipAddressStr
-     * @see #portInt
-     *
-     * @param ipAddressStr
-     * @param portInt
-     */
-    public void setCamUrlStr(String ipAddressStr, int portInt, String topic)
-    {
-        camUrlStr = "http:" + ipAddressStr + ":" + portInt + "/stream_viewer?topic=" + topic;
-    }
-
-
-    /**
-     * Accessor.
-     * @see #camUrlStr
-     *
-     * @return
-     */
-    public String getCamUrlStr()
-    {
-        return camUrlStr;
     }
 
 
